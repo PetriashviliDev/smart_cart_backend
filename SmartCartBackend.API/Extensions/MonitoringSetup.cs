@@ -8,9 +8,9 @@ using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
-namespace SmartCartBackend.ServiceDefaults;
+namespace SmartCartBackend.API.Extensions;
 
-public static class Extensions
+public static class MonitoringSetup
 {
     private const string HealthEndpointPath = "/health";
     private const string AlivenessEndpointPath = "/alive";
@@ -22,12 +22,9 @@ public static class Extensions
 
         builder.AddDefaultHealthChecks();
 
-        builder.Services.AddServiceDiscovery();
-
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
             http.AddStandardResilienceHandler();
-            http.AddServiceDiscovery();
         });
 
         return builder;

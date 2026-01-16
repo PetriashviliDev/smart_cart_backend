@@ -8,7 +8,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DatabaseCo
     public DatabaseContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
-        optionsBuilder.UseNpgsql();
+        optionsBuilder.UseNpgsql(o => o.UseVector());
         
         return new DatabaseContext(optionsBuilder.Options);
     }

@@ -36,11 +36,11 @@ public class VerificationTokenManager(
             issuer: JwtOptions.Issuer,
             audience: JwtOptions.Audience,
             claims: claims,
-            expires: expires,
+            expires: expires.UtcDateTime,
             signingCredentials: credentials
         );
         
         var verificationToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
-        return new TokenResponse { Token = verificationToken, ExpiresAt = expires };
+        return new TokenResponse { Token = verificationToken, ExpiresAt = expires.UtcDateTime };
     }
 }

@@ -100,7 +100,7 @@ public class User : Entity<Guid>
     /// <summary>
     /// Срок действия рефреш токена
     /// </summary>
-    public DateTime RefreshTokenExpiry { get; private set; }
+    public DateTimeOffset RefreshTokenExpiry { get; private set; }
 
     /// <summary>
     /// Непереносимости
@@ -120,7 +120,7 @@ public class User : Entity<Guid>
     
     #endregion Properties
 
-    public void SetRefreshToken(string refreshTokenHash, DateTime refreshTokenExpiry)
+    public void SetRefreshToken(string refreshTokenHash, DateTimeOffset refreshTokenExpiry)
     {
         RefreshTokenHash = refreshTokenHash;
         RefreshTokenExpiry = refreshTokenExpiry;

@@ -13,7 +13,7 @@ public class Meal : Entity<int>
     [JsonConstructor]
     protected Meal(
         int id, 
-        DateTime date, 
+        DateTimeOffset date, 
         int mealTypeId, 
         int dishId,
         int mealPlanId,
@@ -32,7 +32,7 @@ public class Meal : Entity<int>
     
     private Meal(
         int id, 
-        DateTime date, 
+        DateTimeOffset date, 
         int mealTypeId, 
         int dishId, 
         int mealPlanId) : base(id)
@@ -45,7 +45,7 @@ public class Meal : Entity<int>
 
     public static Meal Create(
         int id,
-        DateTime date,
+        DateTimeOffset date,
         int mealTypeId,
         int dishId, 
         int mealPlanId)
@@ -61,7 +61,7 @@ public class Meal : Entity<int>
     /// <summary>
     /// Дата приема пищи
     /// </summary>
-    public DateTime Date { get; private set; }
+    public DateTimeOffset Date { get; private set; }
     
     /// <summary>
     /// Идентификатор типа приема пищи

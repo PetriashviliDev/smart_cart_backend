@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Pgvector;
 using SmartCartBackend.Infrastructure;
 
 #nullable disable
@@ -20,6 +21,7 @@ namespace SmartCartBackend.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "8.0.19")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "vector");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.Allergy", b =>
@@ -36,7 +38,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("character varying(512)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -218,7 +222,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -250,13 +256,73 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.DietStrategy", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DietStrategies", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            Title = "Поддержание веса"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            Title = "Набор мышечной массы"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsDeleted = false,
+                            Title = "Повышение энергии"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsDeleted = false,
+                            Title = "Улучшение общего самочувствия"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsDeleted = false,
+                            Title = "Подготовка к спортивному событию"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsDeleted = false,
+                            Title = "Похудение"
+                        });
+                });
+
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.Difficulty", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -313,7 +379,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("character varying(128)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("Portions")
                         .HasColumnType("integer");
@@ -356,7 +424,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("character varying(128)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -366,6 +436,43 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DishCategories", (string)null);
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.DishEmbedding", b =>
+                {
+                    b.Property<int>("DishId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ContentHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<Vector>("Embedding")
+                        .IsRequired()
+                        .HasColumnType("vector(384)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("TextVersion")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("DishId");
+
+                    b.HasIndex("Model");
+
+                    b.HasIndex("Model", "TextVersion");
+
+                    b.ToTable("DishEmbeddings", (string)null);
                 });
 
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.DishIngredient", b =>
@@ -420,7 +527,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
@@ -1747,7 +1856,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1826,8 +1937,8 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("DishId")
                         .HasColumnType("integer");
@@ -1856,16 +1967,16 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -1878,7 +1989,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1926,14 +2039,14 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("character varying(6)");
 
-                    b.Property<DateTime?>("ConfirmedAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset?>("ConfirmedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsConfirmed")
                         .ValueGeneratedOnAdd()
@@ -1963,7 +2076,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("character varying(512)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -2122,11 +2237,11 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
@@ -2143,8 +2258,8 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<DateTime?>("UsedAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset?>("UsedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()
@@ -2164,7 +2279,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("ShortTitle")
                         .IsRequired()
@@ -2271,8 +2388,8 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<DateTime>("RefreshTokenExpiry")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("RefreshTokenExpiry")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("RefreshTokenHash")
                         .IsRequired()
@@ -2299,7 +2416,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -2321,26 +2440,78 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         {
                             Id = 2,
                             IsDeleted = false,
-                            Title = "Низкая активность"
+                            Title = "Тренируюсь 1-3 раза в неделю"
                         },
                         new
                         {
                             Id = 3,
                             IsDeleted = false,
-                            Title = "Умеренная активность"
+                            Title = "Тренируюсь 3-5 раза в неделю"
                         },
                         new
                         {
                             Id = 4,
                             IsDeleted = false,
-                            Title = "Высокая активность"
+                            Title = "Тренируюсь 6-7 раз в неделю"
                         },
                         new
                         {
                             Id = 5,
                             IsDeleted = false,
-                            Title = "Очень высокая активность"
+                            Title = "Профессионально занимаюсь спортом"
                         });
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.UserAiRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("CompletionTokens")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("DurationMs")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ErrorText")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int?>("PromptTokens")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTimeOffset>("RequestedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<int?>("TotalTokens")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Status", "RequestedAt");
+
+                    b.HasIndex("UserId", "RequestedAt");
+
+                    b.HasIndex("Provider", "Model", "RequestedAt");
+
+                    b.ToTable("UserAiRequests", (string)null);
                 });
 
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.UserAllergy", b =>
@@ -2433,6 +2604,15 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Navigation("DishCategory");
                 });
 
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.DishEmbedding", b =>
+                {
+                    b.HasOne("SmartCardBackend.Domain.Entities.Dish", null)
+                        .WithOne("Embedding")
+                        .HasForeignKey("SmartCardBackend.Domain.Entities.DishEmbedding", "DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.DishIngredient", b =>
                 {
                     b.HasOne("SmartCardBackend.Domain.Entities.Dish", "Dish")
@@ -2487,6 +2667,17 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Navigation("MealType");
                 });
 
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.UserAiRequest", b =>
+                {
+                    b.HasOne("SmartCardBackend.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.UserAllergy", b =>
                 {
                     b.HasOne("SmartCardBackend.Domain.Entities.Allergy", "Allergy")
@@ -2496,7 +2687,7 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("SmartCardBackend.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Allergies")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2515,7 +2706,7 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("SmartCardBackend.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Intolerances")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2534,7 +2725,7 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("SmartCardBackend.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Preferences")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2547,6 +2738,8 @@ namespace SmartCartBackend.Infrastructure.Migrations
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.Dish", b =>
                 {
                     b.Navigation("DishIngredients");
+
+                    b.Navigation("Embedding");
                 });
 
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.DishCategory", b =>
@@ -2562,6 +2755,15 @@ namespace SmartCartBackend.Infrastructure.Migrations
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.MealPlan", b =>
                 {
                     b.Navigation("Meals");
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Allergies");
+
+                    b.Navigation("Intolerances");
+
+                    b.Navigation("Preferences");
                 });
 #pragma warning restore 612, 618
         }

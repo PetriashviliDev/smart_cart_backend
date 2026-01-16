@@ -25,7 +25,8 @@ public class Dish : DisplayEnumeration
         decimal price,
         Difficulty difficulty,
         DishCategory dishCategory,
-        List<DishIngredient> dishIngredients) 
+        List<DishIngredient> dishIngredients,
+        DishEmbedding embedding) 
         : base(id, title, description, image)
     {
         Recipe = recipe;
@@ -37,6 +38,7 @@ public class Dish : DisplayEnumeration
         Difficulty = difficulty;
         DishCategory = dishCategory;
         _dishIngredients = dishIngredients;
+        Embedding = embedding;
     }
     
     private Dish(
@@ -114,14 +116,14 @@ public class Dish : DisplayEnumeration
     public decimal Price { get; private set; }
 
     /// <summary>
-    /// Трудность пригтовления
+    /// Трудность приготовления
     /// </summary>
-    public Difficulty Difficulty { get; set; }
+    public Difficulty Difficulty { get; private set; }
     
     /// <summary>
     /// Категория
     /// </summary>
-    public DishCategory DishCategory { get; }
+    public DishCategory DishCategory { get; private set; }
 
     /// <summary>
     /// Связи блюда и ингредиентов
@@ -129,6 +131,11 @@ public class Dish : DisplayEnumeration
     public IReadOnlyCollection<DishIngredient> DishIngredients => _dishIngredients.AsReadOnly();
 
     private readonly List<DishIngredient> _dishIngredients;
+
+    /// <summary>
+    /// Эмбендинг
+    /// </summary>
+    public DishEmbedding Embedding { get; private set; }
 
     /// <summary>
     /// Ингредиенты

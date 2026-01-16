@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartCardBackend.Domain.Entities;
+using SmartCartBackend.Infrastructure.Extensions;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
@@ -12,19 +13,19 @@ public class MealPlansConfiguration : IEntityTypeConfiguration<MealPlan>
         
         builder.HasKey(x => x.Id);
         
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
 
         builder.Property(x => x.Name)
             .HasMaxLength(256)
             .IsRequired();
         
         builder.Property(x => x.StartDate)
-            .HasColumnType("timestamp without time zone")
+            .HasDateTimeOffsetConversion()
             .IsRequired();
         
         builder.Property(x => x.EndDate)
-            .HasColumnType("timestamp without time zone")
+            .HasDateTimeOffsetConversion()
             .IsRequired();
         
         builder.HasMany(x => x.Meals)

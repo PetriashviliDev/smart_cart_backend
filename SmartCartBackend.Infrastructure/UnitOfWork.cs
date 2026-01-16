@@ -8,7 +8,8 @@ public class UnitOfWork(
     IIngredientRepository ingredientRepository,
     IUserRepository userRepository,
     IPhoneVerificationRepository phoneVerificationRepository,
-    ISessionRepository sessionRepository) : IUnitOfWork
+    ISessionRepository sessionRepository, 
+    IUserAiRequestRepository userAiRequestRepository) : IUnitOfWork
 {
     public IIngredientRepository IngredientRepository { get; } = ingredientRepository;
     
@@ -17,6 +18,8 @@ public class UnitOfWork(
     public IPhoneVerificationRepository PhoneVerificationRepository { get; } = phoneVerificationRepository;
     
     public ISessionRepository SessionRepository { get; } = sessionRepository;
+    
+    public IUserAiRequestRepository UserAiRequestRepository { get; } = userAiRequestRepository;
 
     public async Task<bool> SaveChangesAsync(CancellationToken ct = default)
     {

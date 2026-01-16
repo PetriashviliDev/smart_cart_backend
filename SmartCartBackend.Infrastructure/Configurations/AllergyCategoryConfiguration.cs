@@ -4,21 +4,12 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
-public class AllergyCategoryConfiguration : IEntityTypeConfiguration<AllergyCategory>
+public class AllergyCategoryConfiguration : EnumerationEntityTypeConfiguration<AllergyCategory>
 {
-    public void Configure(EntityTypeBuilder<AllergyCategory> builder)
+    public override void Configure(EntityTypeBuilder<AllergyCategory> builder)
     {
         builder.ToTable("AllergyCategories");
         
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
-
-        builder.Property(x => x.Title)
-            .HasMaxLength(256)
-            .IsRequired();
+        base.Configure(builder);
     }
 }

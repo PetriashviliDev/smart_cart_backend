@@ -12,8 +12,8 @@ public class UserAllergyConfiguration : IEntityTypeConfiguration<UserAllergy>
         
         builder.HasKey(x => x.Id);
         
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
         
         builder.Property(x => x.UserId)
             .IsRequired();
@@ -26,6 +26,7 @@ public class UserAllergyConfiguration : IEntityTypeConfiguration<UserAllergy>
             .HasForeignKey(x => x.AllergyId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Navigation(x => x.Allergy).AutoInclude();
+        builder.Navigation(x => x.Allergy)
+            .AutoInclude();
     }
 }

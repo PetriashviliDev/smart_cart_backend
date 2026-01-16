@@ -4,22 +4,13 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
-public class DishCategoryConfiguration : IEntityTypeConfiguration<DishCategory>
+public class DishCategoryConfiguration : EnumerationEntityTypeConfiguration<DishCategory>
 {
-    public void Configure(EntityTypeBuilder<DishCategory> builder)
+    public override void Configure(EntityTypeBuilder<DishCategory> builder)
     {
         builder.ToTable("DishCategories");
         
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
-
-        builder.Property(x => x.Title)
-            .HasMaxLength(256)
-            .IsRequired();
+        base.Configure(builder);
         
         builder.Property(x => x.Description)
             .HasMaxLength(512)

@@ -12,8 +12,8 @@ public class UserIntoleranceConfiguration : IEntityTypeConfiguration<UserIntoler
         
         builder.HasKey(x => x.Id);
         
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
         
         builder.Property(x => x.UserId)
             .IsRequired();
@@ -26,6 +26,7 @@ public class UserIntoleranceConfiguration : IEntityTypeConfiguration<UserIntoler
             .HasForeignKey(x => x.IntoleranceId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Navigation(x => x.Intolerance).AutoInclude();
+        builder.Navigation(x => x.Intolerance)
+            .AutoInclude();
     }
 }

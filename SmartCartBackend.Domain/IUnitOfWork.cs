@@ -12,5 +12,7 @@ public interface IUnitOfWork
     
     ISessionRepository SessionRepository { get; }
     
+    IUserAiRequestRepository UserAiRequestRepository { get; }
+    
     Task<bool> SaveChangesAsync(CancellationToken ct = default);
 }

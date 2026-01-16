@@ -4,22 +4,13 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
-public class DishConfiguration : IEntityTypeConfiguration<Dish>
+public class DishConfiguration : EnumerationEntityTypeConfiguration<Dish>
 {
-    public void Configure(EntityTypeBuilder<Dish> builder)
+    public override void Configure(EntityTypeBuilder<Dish> builder)
     {
         builder.ToTable("Dishes");
         
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
-
-        builder.Property(x => x.Title)
-            .HasMaxLength(256)
-            .IsRequired();
+        base.Configure(builder);
         
         builder.Property(x => x.Description)
             .HasMaxLength(512)
@@ -47,14 +38,22 @@ public class DishConfiguration : IEntityTypeConfiguration<Dish>
             .HasForeignKey(x => x.DifficultyId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        // builder.HasOne(x => x.Category)
-        //     .WithMany()
-        //     .HasForeignKey(x => x.CategoryId)
-        //     .OnDelete(DeleteBehavior.Cascade);
-        
         builder.HasMany(x => x.DishIngredients)
             .WithOne(x => x.Dish)
             .HasForeignKey(x => x.DishId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(x => x.Embedding)
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(x => x.Difficulty)
+            .AutoInclude();
+        
+        builder.Navigation(x => x.DishIngredients)
+            .AutoInclude();
+        
+        builder.Navigation(x => x.Embedding)
+            .AutoInclude();
     }
 }

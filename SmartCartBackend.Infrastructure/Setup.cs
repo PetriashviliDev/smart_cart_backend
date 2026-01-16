@@ -22,7 +22,8 @@ public static class Setup
             .AddScoped<IIngredientRepository, IngredientRepository>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IPhoneVerificationRepository, PhoneVerificationRepository>()
-            .AddScoped<ISessionRepository, SessionRepository>();
+            .AddScoped<ISessionRepository, SessionRepository>()
+            .AddScoped<IUserAiRequestRepository, UserAiRequestRepository>();
         
         return services;
     }

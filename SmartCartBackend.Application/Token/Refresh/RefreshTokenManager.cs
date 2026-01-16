@@ -21,7 +21,7 @@ public class RefreshTokenManager(
         var expires = Clock.Now.AddDays(JwtOptions.RefreshTokenExpiryInDays);
         var refreshToken = Convert.ToBase64String(randomNumber);
         
-        return new TokenResponse { Token = refreshToken, ExpiresAt = expires };
+        return new TokenResponse { Token = refreshToken, ExpiresAt = expires.UtcDateTime };
     }
     
     public bool Validate(User user, string token)

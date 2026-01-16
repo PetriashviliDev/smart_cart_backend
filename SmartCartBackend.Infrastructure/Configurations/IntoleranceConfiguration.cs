@@ -4,21 +4,12 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
-public class IntoleranceConfiguration : IEntityTypeConfiguration<Intolerance>
+public class IntoleranceConfiguration : EnumerationEntityTypeConfiguration<Intolerance>
 {
-    public void Configure(EntityTypeBuilder<Intolerance> builder)
+    public override void Configure(EntityTypeBuilder<Intolerance> builder)
     {
         builder.ToTable("Intolerances");
         
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
-
-        builder.Property(x => x.Title)
-            .HasMaxLength(256)
-            .IsRequired();
+        base.Configure(builder);
     }
 }

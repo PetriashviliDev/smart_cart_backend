@@ -12,8 +12,8 @@ public class UserPreferenceConfiguration : IEntityTypeConfiguration<UserPreferen
         
         builder.HasKey(x => x.Id);
         
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
 
         builder.Property(x => x.UserId)
             .IsRequired();
@@ -26,6 +26,7 @@ public class UserPreferenceConfiguration : IEntityTypeConfiguration<UserPreferen
             .HasForeignKey(x => x.PreferenceId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Navigation(x => x.Preference).AutoInclude();
+        builder.Navigation(x => x.Preference)
+            .AutoInclude();
     }
 }

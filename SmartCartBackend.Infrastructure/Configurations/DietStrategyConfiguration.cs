@@ -1,0 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SmartCardBackend.Domain.Entities;
+
+namespace SmartCartBackend.Infrastructure.Configurations;
+
+public class DietStrategyConfiguration : EnumerationEntityTypeConfiguration<DietStrategy>
+{
+    public override void Configure(EntityTypeBuilder<DietStrategy> builder)
+    {
+        builder.ToTable("DietStrategies");
+        
+        base.Configure(builder);
+    }
+}

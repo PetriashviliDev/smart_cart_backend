@@ -1,8 +1,10 @@
-namespace SmartCardBackend.Application.Nutrition.ResponseExamples;
+namespace SmartCardBackend.Application.Nutrition;
 
-public record IngredientExample
+public record NutritionIngredient
 {
     public string Name { get; set; }
+    
     public int Amount { get; set; }
+    
     public string Unit { get; set; }
 }

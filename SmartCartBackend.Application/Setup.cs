@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SmartCardBackend.Application.AI;
 using SmartCardBackend.Application.Generators;
+using SmartCardBackend.Application.HostedServices;
 using SmartCardBackend.Application.Identity;
 using SmartCardBackend.Application.Nutrition.Strategy;
 using SmartCardBackend.Application.Token;
@@ -57,8 +58,11 @@ public static class Setup
             ContractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new SnakeCaseNamingStrategy()
-            }
+            },
+            Formatting = Formatting.Indented
         });
+
+        //services.AddHostedService<DishesUploader>();
         
         return services;
     }

@@ -14,8 +14,8 @@ public class MealPlan : Entity<int>
     protected MealPlan(
         int id, 
         string name, 
-        DateTime startDate, 
-        DateTime endDate, 
+        DateTimeOffset startDate, 
+        DateTimeOffset endDate, 
         List<Meal> meals) : base(id)
     {
         Name = name;
@@ -27,8 +27,8 @@ public class MealPlan : Entity<int>
     private MealPlan(
         int id, 
         string name, 
-        DateTime startDate, 
-        DateTime endDate) : base(id)
+        DateTimeOffset startDate, 
+        DateTimeOffset endDate) : base(id)
     {
         Name = name;
         StartDate = startDate;
@@ -39,8 +39,8 @@ public class MealPlan : Entity<int>
     public static MealPlan Create(
         int id,
         string name,
-        DateTime startDate,
-        DateTime endDate)
+        DateTimeOffset startDate,
+        DateTimeOffset endDate)
     {
         var mealPlan = new MealPlan(id, name, startDate, endDate);
         return mealPlan;
@@ -58,12 +58,12 @@ public class MealPlan : Entity<int>
     /// <summary>
     /// Дата начала
     /// </summary>
-    public DateTime StartDate { get; private set; }
+    public DateTimeOffset StartDate { get; private set; }
     
     /// <summary>
     /// Дата окончания
     /// </summary>
-    public DateTime EndDate { get; private set; }
+    public DateTimeOffset EndDate { get; private set; }
 
     /// <summary>
     /// Приемы пищи

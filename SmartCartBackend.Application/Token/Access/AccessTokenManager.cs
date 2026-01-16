@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -30,12 +29,12 @@ public class AccessTokenManager(
             issuer: JwtOptions.Issuer,
             audience: JwtOptions.Audience,
             claims: claims,
-            expires: expires,
+            expires: expires.UtcDateTime,
             signingCredentials: CreateSigningCredentials()
         );
         
         var accessToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
-        return new TokenResponse { Token = accessToken, ExpiresAt = expires };
+        return new TokenResponse { Token = accessToken, ExpiresAt = expires.UtcDateTime };
     }
 
     public ClaimsPrincipal Validate(string token, bool validateLifetime, out SecurityToken validatedToken)

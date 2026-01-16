@@ -12,7 +12,7 @@ public record AuthenticationResponse
     /// <summary>
     /// Дата истечения срока годности токена доступа
     /// </summary>
-    public DateTime AccessTokenExpiresAt { get; init; }
+    public DateTimeOffset AccessTokenExpiresAt { get; init; }
     
     /// <summary>
     /// Рефреш токен для получения нового токена доступа
@@ -22,7 +22,7 @@ public record AuthenticationResponse
     /// <summary>
     /// Дата истечения срока годности рефреш токена
     /// </summary>
-    public DateTime RefreshTokenExpiresAt { get; init; }
+    public DateTimeOffset RefreshTokenExpiresAt { get; init; }
     
     /// <summary>
     /// Пользователь

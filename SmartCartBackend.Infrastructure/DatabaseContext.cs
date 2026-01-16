@@ -31,8 +31,15 @@ public class DatabaseContext : DbContext
     
     public DatabaseContext() {}
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+            optionsBuilder.UseNpgsql(o => o.UseVector());
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresExtension("vector");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
         modelBuilder.AddSeeds();
     }

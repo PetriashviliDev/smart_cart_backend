@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartCardBackend.Domain.Entities;
+using SmartCartBackend.Infrastructure.Extensions;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
@@ -12,8 +13,8 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
         
         builder.HasKey(x => x.Id);
         
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
 
         builder.Property(x => x.Phone)
             .HasMaxLength(32)
@@ -28,11 +29,11 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
             .IsRequired();
         
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("timestamp without time zone")
+            .HasDateTimeOffsetConversion()
             .IsRequired();
         
         builder.Property(x => x.ExpiresAt)
-            .HasColumnType("timestamp without time zone")
+            .HasDateTimeOffsetConversion()
             .IsRequired();
         
         builder.Property(x => x.IsUsed)
@@ -40,7 +41,7 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
             .IsRequired();
         
         builder.Property(x => x.UsedAt)
-            .HasColumnType("timestamp without time zone")
+            .HasDateTimeOffsetNullableConversion()
             .IsRequired(false);
 
         builder.HasIndex(x => x.Phone);

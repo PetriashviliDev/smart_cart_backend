@@ -7,33 +7,41 @@
         <Nullable>disable</Nullable>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\SmartCartBackend.Application\SmartCartBackend.Application.csproj" />
-      <ProjectReference Include="..\SmartCartBackend.Infrastructure\SmartCartBackend.Infrastructure.csproj" />
-      <ProjectReference Include="..\SmartCartBackend.ServiceDefaults\SmartCartBackend.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\SmartCartBackend.Application\SmartCartBackend.Application.csproj"/>
+        <ProjectReference Include="..\SmartCartBackend.Infrastructure\SmartCartBackend.Infrastructure.csproj"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.10.0"/>
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0"/>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.19">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
-    
+
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
-    
+
     <ItemGroup>
-      <None Update="openapi.xml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="openapi.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettings.Development.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
