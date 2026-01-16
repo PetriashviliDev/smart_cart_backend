@@ -10,11 +10,15 @@ public abstract class Repository<TEntity>(
 {
     protected DatabaseContext Context => context;
     
-    public async Task<List<TEntity>> GetAllAsync(
+    public async Task<List<TEntity>> FindManyAsync(
+        Expression<Func<TEntity, bool>> expression, 
         bool trackingEnabled = true, 
         CancellationToken ct = default)
     {
         var query = Context.Set<TEntity>().AsQueryable();
+        
+        if (expression != null)
+            query = query.Where(expression);
         
         if (!trackingEnabled)
             query = query.AsNoTracking();

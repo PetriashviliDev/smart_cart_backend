@@ -4,21 +4,12 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
-public class UserActivityLevelConfiguration : IEntityTypeConfiguration<UserActivityLevel>
+public class UserActivityLevelConfiguration : EnumerationEntityTypeConfiguration<ActivityLevel>
 {
-    public void Configure(EntityTypeBuilder<UserActivityLevel> builder)
+    public override void Configure(EntityTypeBuilder<ActivityLevel> builder)
     {
-        builder.ToTable("UserActivityLevels");
+        builder.ToTable("ActivityLevels");
         
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
-
-        builder.Property(x => x.Title)
-            .HasMaxLength(256)
-            .IsRequired();
+        base.Configure(builder);
     }
 }

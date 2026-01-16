@@ -12,5 +12,19 @@ public interface IUnitOfWork
     
     ISessionRepository SessionRepository { get; }
     
-    Task<bool> SaveChangesAsync(CancellationToken ct = default);
+    IUserAiRequestRepository UserAiRequestRepository { get; }
+    
+    IDishRepository DishRepository { get; }
+    
+    Task<bool> SaveChangesAsync(
+        CancellationToken ct = default);
+    
+    Task<bool> TryBeginTransactionAsync(
+        CancellationToken ct = default);
+    
+    Task<bool> TryRollbackTransactionAsync(
+        CancellationToken ct = default);
+    
+    Task<bool> TryCommitTransactionAsync(
+        CancellationToken ct = default);
 }

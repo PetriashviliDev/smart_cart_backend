@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Storage;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Repositories;
 
@@ -8,8 +9,12 @@ public class UnitOfWork(
     IIngredientRepository ingredientRepository,
     IUserRepository userRepository,
     IPhoneVerificationRepository phoneVerificationRepository,
-    ISessionRepository sessionRepository) : IUnitOfWork
+    ISessionRepository sessionRepository, 
+    IUserAiRequestRepository userAiRequestRepository, 
+    IDishRepository dishRepository) : IUnitOfWork
 {
+    private IDbContextTransaction _transaction;
+    
     public IIngredientRepository IngredientRepository { get; } = ingredientRepository;
     
     public IUserRepository UserRepository { get; } = userRepository;
@@ -17,11 +22,51 @@ public class UnitOfWork(
     public IPhoneVerificationRepository PhoneVerificationRepository { get; } = phoneVerificationRepository;
     
     public ISessionRepository SessionRepository { get; } = sessionRepository;
+    
+    public IUserAiRequestRepository UserAiRequestRepository { get; } = userAiRequestRepository;
+    
+    public IDishRepository DishRepository { get; } = dishRepository;
 
     public async Task<bool> SaveChangesAsync(CancellationToken ct = default)
     {
         // TODO: pre and post domain events
         var result = await context.SaveChangesAsync(ct);
         return result > 0;
+    }
+
+    public async Task<bool> TryBeginTransactionAsync(
+        CancellationToken ct = default)
+    {
+        if (_transaction != null)
+            return false;
+        
+        _transaction = await context.Database.BeginTransactionAsync(ct);
+        
+        return true;
+    }
+
+    public async Task<bool> TryRollbackTransactionAsync(
+        CancellationToken ct = default)
+    {
+        if (_transaction == null) 
+            return false;
+        
+        await _transaction.RollbackAsync(ct);
+        _transaction = null;
+
+        return true;
+
+    }
+
+    public async Task<bool> TryCommitTransactionAsync(
+        CancellationToken ct = default)
+    {
+        if (_transaction == null) 
+            return false;
+        
+        await _transaction.CommitAsync(ct);
+        _transaction = null;
+
+        return true;
     }
 }

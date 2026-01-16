@@ -5,14 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SmartCardBackend.Application.AI;
-using SmartCardBackend.Application.Generators;
-using SmartCardBackend.Application.Identity;
-using SmartCardBackend.Application.Nutrition.Strategy;
-using SmartCardBackend.Application.Token;
-using SmartCardBackend.Application.Token.Access;
-using SmartCardBackend.Application.Token.Refresh;
-using SmartCardBackend.Application.Token.Verification;
-using SmartCardBackend.Application.Verifications;
+using SmartCardBackend.Application.Nutrition;
+using SmartCardBackend.Application.Nutrition.Strategies;
+using SmartCardBackend.Application.Services.Generators;
+using SmartCardBackend.Application.Services.Identity;
+using SmartCardBackend.Application.Services.Token;
+using SmartCardBackend.Application.Services.Token.Access;
+using SmartCardBackend.Application.Services.Token.Refresh;
+using SmartCardBackend.Application.Services.Token.Verification;
+using SmartCardBackend.Application.Services.Verifications;
 using SmartCartBackend.Common.Clock;
 
 namespace SmartCardBackend.Application;
@@ -31,6 +32,7 @@ public static class Setup
         services.AddValidatorsFromAssembly(assembly);
         
         services.AddAiClients(configuration);
+        services.AddNutritionServices(configuration);
 
         services.AddHttpContextAccessor();
 
@@ -57,8 +59,11 @@ public static class Setup
             ContractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new SnakeCaseNamingStrategy()
-            }
+            },
+            Formatting = Formatting.Indented
         });
+
+        //services.AddHostedService<DishesUploader>();
         
         return services;
     }

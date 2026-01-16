@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartCardBackend.Application.Verifications;
+using SmartCardBackend.Application.Services.Verifications;
 using SmartCartBackend.API.Requests;
 
 namespace SmartCartBackend.API.Controllers;

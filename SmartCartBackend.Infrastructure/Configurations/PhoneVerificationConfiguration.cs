@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartCardBackend.Domain.Entities;
+using SmartCartBackend.Infrastructure.Extensions;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
@@ -12,8 +13,8 @@ public class PhoneVerificationConfiguration : IEntityTypeConfiguration<PhoneVeri
         
         builder.HasKey(x => x.Id);
         
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
 
         builder.Property(x => x.Phone)
             .HasMaxLength(32)
@@ -24,11 +25,11 @@ public class PhoneVerificationConfiguration : IEntityTypeConfiguration<PhoneVeri
             .IsRequired();
         
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("timestamp without time zone")
+            .HasDateTimeOffsetConversion()
             .IsRequired();
         
         builder.Property(x => x.ExpiresAt)
-            .HasColumnType("timestamp without time zone")
+            .HasDateTimeOffsetConversion()
             .IsRequired();
         
         builder.Property(x => x.IsConfirmed)
@@ -36,7 +37,7 @@ public class PhoneVerificationConfiguration : IEntityTypeConfiguration<PhoneVeri
             .IsRequired();
         
         builder.Property(x => x.ConfirmedAt)
-            .HasColumnType("timestamp without time zone")
+            .HasNullableDateTimeOffsetConversion()
             .IsRequired(false);
 
         builder.HasIndex(x => x.Phone);

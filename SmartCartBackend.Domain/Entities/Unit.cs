@@ -1,18 +1,26 @@
+using System.Runtime.CompilerServices;
+using SmartCardBackend.Domain.Entities.SeedWork;
+
 namespace SmartCardBackend.Domain.Entities;
 
 /// <summary>
 /// Доменная модель справочника единицы измерения
 /// </summary>
-/// <param name="id">Идентификатор</param>
-/// <param name="title">Наименование</param>
-/// <param name="shortTitle">Сокращение</param>
-public class Unit(
-    int id,
-    string title, 
-    string shortTitle) 
-    : SeedWork.Enumeration(id, title)
+public class Unit : Enumeration
 {
-    public string ShortTitle { get; private set; } = shortTitle;
+    private Unit() { }
+
+    public Unit(
+        int id,
+        string title, 
+        string shortTitle,
+        [CallerMemberName] string callerName = null) 
+        : base(id, title, callerName)
+    {
+        ShortTitle = shortTitle;
+    }
+    
+    public string ShortTitle { get; private set; }
 
     #region Seeds
     

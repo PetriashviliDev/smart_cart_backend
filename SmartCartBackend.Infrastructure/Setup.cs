@@ -20,9 +20,11 @@ public static class Setup
 
         services.AddScoped<IUnitOfWork, UnitOfWork>()
             .AddScoped<IIngredientRepository, IngredientRepository>()
+            .AddScoped<IDishRepository, DishRepository>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IPhoneVerificationRepository, PhoneVerificationRepository>()
-            .AddScoped<ISessionRepository, SessionRepository>();
+            .AddScoped<ISessionRepository, SessionRepository>()
+            .AddScoped<IUserAiRequestRepository, UserAiRequestRepository>();
         
         return services;
     }

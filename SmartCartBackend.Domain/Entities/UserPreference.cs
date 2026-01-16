@@ -7,34 +7,43 @@ public class UserPreference : Entity<Guid>
 {
     #region Constructors
     
+    private UserPreference(Guid id) : base(id) { }
+    
     [JsonConstructor]
     protected UserPreference(
         Guid id, 
         Guid userId,
-        int preferenceId, 
-        Preference preference) : base(id)
+        int dishId, 
+        Dish dish, 
+        int mealTypeId, 
+        MealType mealType) : base(id)
     {
         UserId = userId;
-        PreferenceId = preferenceId;
-        Preference = preference;
+        DishId = dishId;
+        Dish = dish;
+        MealTypeId = mealTypeId;
+        MealType = mealType;
     }
 
     private UserPreference(
         Guid id,
         Guid userId,
-        int preferenceId) : base(id)
+        int dishId,
+        int mealTypeId) : base(id)
     {
         UserId = userId;
-        PreferenceId = preferenceId;
+        DishId = dishId;
+        MealTypeId = mealTypeId;
     }
 
     public static UserPreference Create(
         Guid id,
         Guid userId,
-        int preferenceId)
+        int dishId, 
+        int mealTypeId)
     {
         var userPreference = new UserPreference(
-            id, userId, preferenceId);
+            id, userId, dishId, mealTypeId);
 
         return userPreference;
     }
@@ -47,9 +56,13 @@ public class UserPreference : Entity<Guid>
 
     public User User { get; }
 
-    public int PreferenceId { get; private set; }
+    public int DishId { get; private set; }
 
-    public Preference Preference { get; }
+    public Dish Dish { get; }
+
+    public int MealTypeId { get; private set; }
+
+    public MealType MealType { get; }
     
     #endregion Properties
 }

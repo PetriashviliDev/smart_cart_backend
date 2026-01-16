@@ -11,7 +11,6 @@ COPY ["SmartCartBackend.Application/SmartCartBackend.Application.csproj", "Smart
 COPY ["SmartCartBackend.Domain/SmartCartBackend.Domain.csproj", "SmartCartBackend.Domain/"]
 COPY ["SmartCartBackend.Infrastructure/SmartCartBackend.Infrastructure.csproj", "SmartCartBackend.Infrastructure/"]
 COPY ["SmartCartBackend.Common/SmartCartBackend.Common.csproj", "SmartCartBackend.Common/"]
-COPY ["SmartCartBackend.ServiceDefaults/SmartCartBackend.ServiceDefaults.csproj", "SmartCartBackend.ServiceDefaults/"]
 RUN dotnet restore "SmartCartBackend.API/SmartCartBackend.API.csproj"
 COPY . .
 WORKDIR "/src/SmartCartBackend.API"

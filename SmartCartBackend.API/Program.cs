@@ -4,13 +4,13 @@ using Microsoft.Extensions.Hosting;
 using SmartCardBackend.Application;
 using SmartCartBackend.API;
 using SmartCartBackend.API.Authentication;
+using SmartCartBackend.API.Extensions;
 using SmartCartBackend.API.Swagger;
 using SmartCartBackend.Infrastructure;
-using SmartCartBackend.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
+builder.AddDefaultHealthChecks();
 
 builder.Services
     .AddPresentation(builder.Configuration)

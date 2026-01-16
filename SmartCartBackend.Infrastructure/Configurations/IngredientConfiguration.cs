@@ -4,22 +4,13 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
-public class IngredientConfiguration : IEntityTypeConfiguration<Ingredient>
+public class IngredientConfiguration : EnumerationEntityTypeConfiguration<Ingredient>
 {
-    public void Configure(EntityTypeBuilder<Ingredient> builder)
+    public override void Configure(EntityTypeBuilder<Ingredient> builder)
     {
         builder.ToTable("Ingredients");
         
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
-
-        builder.Property(x => x.Title)
-            .HasMaxLength(256)
-            .IsRequired();
+        base.Configure(builder);
         
         builder.Property(x => x.Description)
             .HasMaxLength(512)
@@ -39,11 +30,14 @@ public class IngredientConfiguration : IEntityTypeConfiguration<Ingredient>
         
         builder.Property(x => x.Price)
             .HasPrecision(10, 2)
-            .IsRequired();
+            .IsRequired(false);
         
         builder.HasMany(x => x.DishIngredients)
             .WithOne(x => x.Ingredient)
             .HasForeignKey(x => x.IngredientId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(x => x.Allergies)
+            .AutoInclude();
     }
 }

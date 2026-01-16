@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
@@ -9,6 +10,8 @@ namespace SmartCardBackend.Domain.Entities;
 public class DishCategory : DisplayEnumeration
 {
     #region Constructors
+    
+    private DishCategory() { }
 
     [JsonConstructor]
     protected DishCategory(
@@ -16,8 +19,9 @@ public class DishCategory : DisplayEnumeration
         string title, 
         string description, 
         string image, 
-        List<Dish> dishes)
-        : base(id, title, description, image)
+        List<Dish> dishes,
+        [CallerMemberName] string callerName = null)
+        : base(id, title, description, image, callerName)
     {
         _dishes = dishes;
     }
@@ -26,8 +30,9 @@ public class DishCategory : DisplayEnumeration
         int id,
         string title, 
         string description, 
-        string image)
-        : base(id, title, description, image)
+        string image,
+        [CallerMemberName] string callerName = null)
+        : base(id, title, description, image, callerName)
     {
         _dishes = [];
     }

@@ -3,24 +3,28 @@ namespace SmartCardBackend.Domain.Entities.SeedWork;
 /// <summary>
 /// Базовая расширенная доменная модель справочника
 /// </summary>
-/// <param name="id">Идентификатор</param>
-/// <param name="title">Наименование</param>
-/// <param name="description">Описание</param>
-/// <param name="image">Изображение</param>
-public abstract class DisplayEnumeration(
-    int id,
-    string title, 
-    string description, 
-    string image) 
-    : Enumeration(id, title)
+public abstract class DisplayEnumeration : Enumeration
 {
+    protected DisplayEnumeration() { }
+
+    protected DisplayEnumeration(
+        int id,
+        string title, 
+        string description, 
+        string image, 
+        string internalName) : base(id, title, internalName)
+    {
+        Description = description;
+        Image = image;
+    }
+    
     /// <summary>
     /// Описание
     /// </summary>
-    public string Description { get; private set; } = description;
+    public string Description { get; private set; }
 
     /// <summary>
     /// Изображение
     /// </summary>
-    public string Image { get; private set; } = image;
+    public string Image { get; private set; }
 }

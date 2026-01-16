@@ -7,6 +7,8 @@ public class User : Entity<Guid>
 {
     #region Constructors
 
+    private User(Guid id) : base(id) { }
+
     [JsonConstructor]
     protected User(
         Guid id,
@@ -16,11 +18,12 @@ public class User : Entity<Guid>
         string gender,
         int age,
         double height,
-        double weight
-        /*,
-        List<UserIntolerance> intolerances,
+        double weight,
+        string intolerances,
+        List<UserAllergy> allergies,
         List<UserPreference> preferences,
-        List<UserAllergy> allergies*/) : base(id)
+        int activityLevelId,
+        ActivityLevel activityLevel) : base(id)
     {
         Name = name;
         Email = email;
@@ -29,9 +32,38 @@ public class User : Entity<Guid>
         Age = age;
         Height = height;
         Weight = weight;
-        Intolerances = [];
-        Preferences = [];
-        Allergies = [];
+        Intolerances = intolerances;
+        Allergies = allergies;
+        Preferences = preferences;
+        ActivityLevelId = activityLevelId;
+        ActivityLevel = activityLevel;
+    }
+    
+    private User(
+        Guid id,
+        string name,
+        string email,
+        string phone,
+        string gender,
+        int age,
+        double height,
+        double weight,
+        string intolerances,
+        List<UserAllergy> allergies,
+        List<UserPreference> preferences,
+        int activityLevelId) : base(id)
+    {
+        Name = name;
+        Email = email;
+        Phone = phone;
+        Gender = gender;
+        Age = age;
+        Height = height;
+        Weight = weight;
+        Intolerances = intolerances;
+        Allergies = allergies;
+        Preferences = preferences;
+        ActivityLevelId = activityLevelId;
     }
 
     public static User Create(
@@ -43,12 +75,24 @@ public class User : Entity<Guid>
         int age, 
         double height, 
         double weight,
-        List<UserIntolerance> intolerances = null, 
-        List<UserPreference> preferences = null, 
-        List<UserAllergy> allergies = null)
+        string intolerances,
+        List<UserAllergy> allergies,
+        List<UserPreference> preferences,
+        int activityLevelId)
     {
-        var user = new User(id, name, email, phone, gender, 
-            age, height, weight);
+        var user = new User(
+            id, 
+            name, 
+            email, 
+            phone, 
+            gender, 
+            age, 
+            height, 
+            weight,
+            intolerances, 
+            allergies,
+            preferences,
+            activityLevelId);
 
         return user;
     }
@@ -100,12 +144,12 @@ public class User : Entity<Guid>
     /// <summary>
     /// Срок действия рефреш токена
     /// </summary>
-    public DateTime RefreshTokenExpiry { get; private set; }
+    public DateTimeOffset RefreshTokenExpiry { get; private set; }
 
     /// <summary>
     /// Непереносимости
     /// </summary>
-    public List<UserIntolerance> Intolerances { get; private set; }
+    public string Intolerances { get; private set; }
 
     /// <summary>
     /// Предпочтения
@@ -117,10 +161,19 @@ public class User : Entity<Guid>
     /// </summary>
     public List<UserAllergy> Allergies { get; private set; }
 
+    /// <summary>
+    /// Идентификатор уровня активности
+    /// </summary>
+    public int ActivityLevelId { get; private set; }
+
+    /// <summary>
+    /// Уровень активности
+    /// </summary>
+    public ActivityLevel ActivityLevel { get; set; }
     
     #endregion Properties
 
-    public void SetRefreshToken(string refreshTokenHash, DateTime refreshTokenExpiry)
+    public void SetRefreshToken(string refreshTokenHash, DateTimeOffset refreshTokenExpiry)
     {
         RefreshTokenHash = refreshTokenHash;
         RefreshTokenExpiry = refreshTokenExpiry;

@@ -4,22 +4,13 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
-public class DishConfiguration : IEntityTypeConfiguration<Dish>
+public class DishConfiguration : EnumerationEntityTypeConfiguration<Dish>
 {
-    public void Configure(EntityTypeBuilder<Dish> builder)
+    public override void Configure(EntityTypeBuilder<Dish> builder)
     {
         builder.ToTable("Dishes");
         
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Id).
-            ValueGeneratedNever();
-
-        builder.Property(x => x.Title)
-            .HasMaxLength(256)
-            .IsRequired();
+        base.Configure(builder);
         
         builder.Property(x => x.Description)
             .HasMaxLength(512)
@@ -31,7 +22,7 @@ public class DishConfiguration : IEntityTypeConfiguration<Dish>
         
         builder.Property(x => x.Price)
             .HasPrecision(10, 2)
-            .IsRequired();
+            .IsRequired(false);
         
         builder.Property(x => x.Portions)
             .IsRequired();
@@ -45,16 +36,24 @@ public class DishConfiguration : IEntityTypeConfiguration<Dish>
         builder.HasOne(x => x.Difficulty)
             .WithMany()
             .HasForeignKey(x => x.DifficultyId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        // builder.HasOne(x => x.Category)
-        //     .WithMany()
-        //     .HasForeignKey(x => x.CategoryId)
-        //     .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasMany(x => x.DishIngredients)
             .WithOne(x => x.Dish)
             .HasForeignKey(x => x.DishId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(x => x.DishEmbedding)
+            .WithOne()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Navigation(x => x.Difficulty)
+            .AutoInclude();
+        
+        builder.Navigation(x => x.DishIngredients)
+            .AutoInclude();
+        
+        builder.Navigation(x => x.DishEmbedding)
+            .AutoInclude();
     }
 }

@@ -3,22 +3,20 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartCardBackend.Application.Constants;
-using SmartCardBackend.Application.Generators;
-using SmartCardBackend.Application.Identity;
 using SmartCardBackend.Application.Result;
-using SmartCardBackend.Application.Token.Access;
-using SmartCardBackend.Application.Token.Refresh;
-using SmartCardBackend.Application.Token.Verification;
+using SmartCardBackend.Application.Services.Generators;
+using SmartCardBackend.Application.Services.Identity;
+using SmartCardBackend.Application.Services.Token.Access;
+using SmartCardBackend.Application.Services.Token.Refresh;
+using SmartCardBackend.Application.Services.Token.Verification;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities;
 using SmartCartBackend.API.Requests;
 using SmartCartBackend.Common.Clock;
-using SmartCartBackend.Infrastructure;
 
 namespace SmartCartBackend.API.Authentication;
 
 public class AuthenticationService(
-    DatabaseContext context,
     ILogger<AuthenticationService> logger,
     IIdentityService identityService,
     IUnitOfWork unitOfWork,
@@ -70,7 +68,11 @@ public class AuthenticationService(
             request.Gender, 
             request.Age, 
             request.Height, 
-            request.Weight);
+            request.Weight,
+            "",
+            [], 
+            [], 
+            1);
         
         unitOfWork.UserRepository.Add(user);
         

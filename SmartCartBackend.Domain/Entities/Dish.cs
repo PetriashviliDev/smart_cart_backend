@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
@@ -10,6 +11,8 @@ namespace SmartCardBackend.Domain.Entities;
 public class Dish : DisplayEnumeration
 {
     #region Constructors
+
+    private Dish() { }
     
     [JsonConstructor]
     protected Dish(
@@ -22,11 +25,13 @@ public class Dish : DisplayEnumeration
         string image,
         int categoryId,
         int portions,
-        decimal price,
+        decimal? price,
         Difficulty difficulty,
         DishCategory dishCategory,
-        List<DishIngredient> dishIngredients) 
-        : base(id, title, description, image)
+        List<DishIngredient> dishIngredients,
+        DishEmbedding dishEmbedding,
+        [CallerMemberName] string callerName = null) 
+        : base(id, title, description, image, callerName)
     {
         Recipe = recipe;
         CookingTime = cookingTime;
@@ -37,6 +42,7 @@ public class Dish : DisplayEnumeration
         Difficulty = difficulty;
         DishCategory = dishCategory;
         _dishIngredients = dishIngredients;
+        DishEmbedding = dishEmbedding;
     }
     
     private Dish(
@@ -49,8 +55,9 @@ public class Dish : DisplayEnumeration
         string image,
         int categoryId,
         int portions,
-        decimal price) 
-        : base(id, title, description, image)
+        decimal? price,
+        [CallerMemberName] string callerName = null) 
+        : base(id, title, description, image, callerName)
     {
         Recipe = recipe;
         CookingTime = cookingTime;
@@ -71,7 +78,7 @@ public class Dish : DisplayEnumeration
         string image,
         int categoryId,
         int portions,
-        decimal price)
+        decimal? price)
     {
         var dish = new Dish(id, title, description, recipe,
             cookingTime, difficultyId, image, categoryId, portions, price);
@@ -111,17 +118,17 @@ public class Dish : DisplayEnumeration
     /// <summary>
     /// Цена
     /// </summary>
-    public decimal Price { get; private set; }
+    public decimal? Price { get; private set; }
 
     /// <summary>
-    /// Трудность пригтовления
+    /// Трудность приготовления
     /// </summary>
-    public Difficulty Difficulty { get; set; }
+    public Difficulty Difficulty { get; private set; }
     
     /// <summary>
     /// Категория
     /// </summary>
-    public DishCategory DishCategory { get; }
+    public DishCategory DishCategory { get; private set; }
 
     /// <summary>
     /// Связи блюда и ингредиентов
@@ -129,6 +136,11 @@ public class Dish : DisplayEnumeration
     public IReadOnlyCollection<DishIngredient> DishIngredients => _dishIngredients.AsReadOnly();
 
     private readonly List<DishIngredient> _dishIngredients;
+
+    /// <summary>
+    /// Связь с векторным представлением
+    /// </summary>
+    public DishEmbedding DishEmbedding { get; private set; }
 
     /// <summary>
     /// Ингредиенты
@@ -155,16 +167,6 @@ public class Dish : DisplayEnumeration
     /// Общее количество углеводов
     /// </summary>
     public decimal TotalCarbohydrates => Ingredients.Sum(di => di.Carbohydrates);
-    
-    /// <summary>
-    /// Общая стоимость ингредиентов
-    /// </summary>
-    public decimal TotalIngredientsCost => DishIngredients.Sum(di => di.Ingredient.Price * di.Amount / 100);
-    
-    /// <summary>
-    /// Наценка в процентах
-    /// </summary>
-    public decimal MarkupPercentage => TotalIngredientsCost > 0 ? ((Price - TotalIngredientsCost) / TotalIngredientsCost) * 100 : 0;
     
     #endregion Properties
 }

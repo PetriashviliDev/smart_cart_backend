@@ -7,13 +7,15 @@ public class PhoneVerification : Entity<Guid>
 {
     #region Constructors
     
+    private PhoneVerification(Guid id) : base(id) { }
+    
     [JsonConstructor]
     protected PhoneVerification(
         Guid id, 
         string phone, 
         string code,
-        DateTime createdAt,
-        DateTime expiresAt) : base(id)
+        DateTimeOffset createdAt,
+        DateTimeOffset expiresAt) : base(id)
     {
         Phone = phone;
         Code = code;
@@ -25,8 +27,8 @@ public class PhoneVerification : Entity<Guid>
         Guid id,
         string phone,
         string code,
-        DateTime createdAt,
-        DateTime expiresAt)
+        DateTimeOffset createdAt,
+        DateTimeOffset expiresAt)
     {
         var phoneVerification = new PhoneVerification(
             id, phone, code, createdAt, expiresAt);
@@ -42,17 +44,17 @@ public class PhoneVerification : Entity<Guid>
     
     public string Code { get; private set; }
     
-    public DateTime CreatedAt { get; private set; }
+    public DateTimeOffset CreatedAt { get; private set; }
     
-    public DateTime ExpiresAt { get; private set; }
+    public DateTimeOffset ExpiresAt { get; private set; }
 
     public bool IsConfirmed { get; private set; }
 
-    public DateTime? ConfirmedAt { get; private set; }
+    public DateTimeOffset? ConfirmedAt { get; private set; }
     
     #endregion Properties
 
-    public void SetIsConfirmed(bool isConfirmed, DateTime confirmedAt)
+    public void SetIsConfirmed(bool isConfirmed, DateTimeOffset confirmedAt)
     {
         IsConfirmed = isConfirmed;
         ConfirmedAt = confirmedAt;

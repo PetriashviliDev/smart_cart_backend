@@ -10,6 +10,8 @@ public class DishIngredient : Entity<int>
 {
     #region Constructors
     
+    private DishIngredient(int id) : base(id) { }
+    
     [JsonConstructor]
     protected DishIngredient(
         int id,

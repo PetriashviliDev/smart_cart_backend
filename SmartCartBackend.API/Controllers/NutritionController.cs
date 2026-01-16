@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartCardBackend.Application.Identity;
 using SmartCardBackend.Application.Nutrition;
-using SmartCardBackend.Application.Nutrition.Strategy;
+using SmartCardBackend.Application.Nutrition.Strategies;
+using SmartCardBackend.Application.Services.Identity;
 
 namespace SmartCartBackend.API.Controllers;
 

@@ -6,7 +6,9 @@ namespace SmartCardBackend.Domain.Entities;
 public class UserAllergy : Entity<Guid>
 {
     #region Constructors
-    
+
+    private UserAllergy(Guid id) : base(id) { }
+
     [JsonConstructor]
     protected UserAllergy(
         Guid id, 

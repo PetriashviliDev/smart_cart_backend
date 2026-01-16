@@ -21,7 +21,7 @@ public class DishIngredientConfiguration : IEntityTypeConfiguration<DishIngredie
         builder.HasOne(x => x.Unit)
             .WithMany()
             .HasForeignKey(x => x.UnitId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasOne(x => x.Dish)
             .WithMany(x => x.DishIngredients)
