@@ -10,12 +10,14 @@ public abstract class Repository<TEntity>(
 {
     protected DatabaseContext Context => context;
     
+    protected virtual DbSet<TEntity> Set => Context.Set<TEntity>();
+    
     public async Task<List<TEntity>> FindManyAsync(
         Expression<Func<TEntity, bool>> expression, 
         bool trackingEnabled = true, 
         CancellationToken ct = default)
     {
-        var query = Context.Set<TEntity>().AsQueryable();
+        var query = Set.AsQueryable();
         
         if (expression != null)
             query = query.Where(expression);
@@ -32,7 +34,7 @@ public abstract class Repository<TEntity>(
         bool trackingEnabled = true, 
         CancellationToken ct = default)
     {
-        var query = Context.Set<TEntity>().AsQueryable();
+        var query = Set.AsQueryable();
         
         if (!trackingEnabled)
             query = query.AsNoTracking();
@@ -41,6 +43,5 @@ public abstract class Repository<TEntity>(
         return entity;
     }
 
-    public void Add(TEntity entity) =>
-        context.Set<TEntity>().Add(entity);
+    public void Add(TEntity entity) => Set.Add(entity);
 }

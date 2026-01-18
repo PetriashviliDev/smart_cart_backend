@@ -169,4 +169,10 @@ public class Dish : DisplayEnumeration
     public decimal TotalCarbohydrates => Ingredients.Sum(di => di.Carbohydrates);
     
     #endregion Properties
+
+    #region Methods
+
+    public void SetEmbedding(DishEmbedding dishEmbedding) => DishEmbedding = dishEmbedding;
+
+    #endregion Methods
 }

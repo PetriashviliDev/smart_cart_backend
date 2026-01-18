@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SmartCardBackend.Application;
+using SmartCardBackend.Application.Hangfire;
 using SmartCartBackend.API;
 using SmartCartBackend.API.Authentication;
 using SmartCartBackend.API.Extensions;
@@ -38,6 +39,10 @@ var app = builder.Build();
 
 app.UseRouting();
 app.UseCors("AllowAll");
+
+app.UseHangfire(
+    app.Services.GetRequiredService<IJobScheduler>(), 
+    app.Configuration);
 
 if (app.Environment.IsDevelopment())
     app.UseSwaggerCommon();

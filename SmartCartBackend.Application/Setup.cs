@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SmartCardBackend.Application.AI;
+using SmartCardBackend.Application.Hangfire;
 using SmartCardBackend.Application.Nutrition;
 using SmartCardBackend.Application.Nutrition.Strategies;
 using SmartCardBackend.Application.Services.Generators;
@@ -35,6 +36,8 @@ public static class Setup
         services.AddNutritionServices(configuration);
 
         services.AddHttpContextAccessor();
+        
+        services.ConfigureHangfire(configuration);
 
         services
             .AddTransient<ISystemClock, LocalSystemClock>()
@@ -62,8 +65,6 @@ public static class Setup
             },
             Formatting = Formatting.Indented
         });
-
-        //services.AddHostedService<DishesUploader>();
         
         return services;
     }

@@ -35,7 +35,6 @@ public class DishEmbedding : Entity<Guid>
         int dishId,
         string model,
         int dimensions,
-        int textVersion,
         string contentHash,
         DateTimeOffset updatedAt,
         Vector embedding)
@@ -45,12 +44,26 @@ public class DishEmbedding : Entity<Guid>
             dishId, 
             model, 
             dimensions,
-            textVersion,
+            1,
             contentHash,
             updatedAt,
             embedding);
         
         return dishEmbedding;
+    }
+    
+    public void Update(
+        string model,
+        int dimensions,
+        string contentHash,
+        DateTimeOffset updatedAt,
+        Vector embedding)
+    {
+        Model = model;
+        Dimensions = dimensions;
+        ContentHash = contentHash;
+        UpdatedAt = updatedAt;
+        Embedding = embedding;
     }
     
     #endregion Constructors
