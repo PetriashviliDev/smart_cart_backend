@@ -17,7 +17,7 @@ public class WeightLossStrategy(
         NutritionRequirements requirements)
     {
         var allergies = user.Allergies.Count > 0 ? string.Join(", ", user.Allergies) : "Нет";
-        var intolerances = !string.IsNullOrWhiteSpace(user.Intolerances) ? user.Intolerances : "Нет";
+        var doesNotEat = !string.IsNullOrWhiteSpace(user.DoesNotEat) ? user.DoesNotEat : "Нет";
 
         return $$"""
                   Создай план питания для похудения.
@@ -31,7 +31,7 @@ public class WeightLossStrategy(
                   
                   ПРОДУКТОВЫЕ ОГРАНИЧЕНИЯ:
                   - Аллергии: {{allergies}}
-                  - Непереносимости: {{intolerances}})
+                  - Исключить продукты: {{doesNotEat}})
                   
                   ТРЕБОВАНИЯ:
                   - Цель: похудение

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Repositories;
@@ -5,7 +6,7 @@ using SmartCardBackend.Domain.Repositories;
 namespace SmartCartBackend.Infrastructure;
 
 public class UnitOfWork(
-    DatabaseContext context,
+    IDbContextFactory<DatabaseContext> contextFactory,
     IIngredientRepository ingredientRepository,
     IUserRepository userRepository,
     IPhoneVerificationRepository phoneVerificationRepository,
@@ -14,6 +15,9 @@ public class UnitOfWork(
     IDishRepository dishRepository) : IUnitOfWork
 {
     private IDbContextTransaction _transaction;
+
+    private DatabaseContext _context;
+    public DatabaseContext Context => _context ??= contextFactory.CreateDbContext();
     
     public IIngredientRepository IngredientRepository { get; } = ingredientRepository;
     
@@ -30,7 +34,7 @@ public class UnitOfWork(
     public async Task<bool> SaveChangesAsync(CancellationToken ct = default)
     {
         // TODO: pre and post domain events
-        var result = await context.SaveChangesAsync(ct);
+        var result = await Context.SaveChangesAsync(ct);
         return result > 0;
     }
 
@@ -40,7 +44,7 @@ public class UnitOfWork(
         if (_transaction != null)
             return false;
         
-        _transaction = await context.Database.BeginTransactionAsync(ct);
+        _transaction = await Context.Database.BeginTransactionAsync(ct);
         
         return true;
     }

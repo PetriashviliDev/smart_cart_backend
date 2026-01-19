@@ -6,7 +6,7 @@ namespace SmartCardBackend.Domain.Entities;
 /// <summary>
 /// Время дня приема пищи
 /// </summary>
-public class MealType : Enumeration
+public class MealType : ActualizedEnumeration<MealType>
 {
     private MealType() { }
 

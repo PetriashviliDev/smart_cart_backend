@@ -2,7 +2,7 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCardBackend.Domain.Repositories;
 
-public interface ISessionRepository : IRepository<Session>
+public interface ISessionRepository : IRepository<Session, Guid>
 {
     Task<Session> FindLastActiveAsync(
         string phone,

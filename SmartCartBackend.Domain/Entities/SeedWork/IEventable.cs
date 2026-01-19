@@ -2,7 +2,7 @@ using SmartCardBackend.Domain.Events;
 
 namespace SmartCardBackend.Domain.Entities.SeedWork;
 
-public interface IEventableEntity
+public interface IEventable
 {
     IReadOnlyCollection<IDomainEvent> PreDomainEvents { get; }
     void AddPreDomainEvent(IDomainEvent domainEvent);

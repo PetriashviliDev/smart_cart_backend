@@ -2,9 +2,9 @@ using SmartCardBackend.Application.Nutrition.Pipeline.Models;
 
 namespace SmartCardBackend.Application.Nutrition.Pipeline.Steps;
 
-public class QueryBuildingPipelineStep : INutritionPlanGenerationPipeline
+public class QueryBuildingPipelineStep : INutritionPlanGenerationPipelineStep
 {
-    public async Task<NutritionPlanGenerationResult> GenerateAsync(
+    public async Task HandleAsync(
         NutritionPlanGenerationContext context, 
         CancellationToken ct = default)
     {

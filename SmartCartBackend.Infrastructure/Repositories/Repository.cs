@@ -1,12 +1,14 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using SmartCardBackend.Domain.Entities.SeedWork;
 using SmartCardBackend.Domain.Repositories;
 
 namespace SmartCartBackend.Infrastructure.Repositories;
 
-public abstract class Repository<TEntity>(
-    DatabaseContext context) : IRepository<TEntity> 
-    where TEntity : class
+public abstract class Repository<TEntity, TIdentifier>(
+    DatabaseContext context) 
+    : IRepository<TEntity, TIdentifier> 
+    where TEntity : class, IHasId<TIdentifier>
 {
     protected DatabaseContext Context => context;
     

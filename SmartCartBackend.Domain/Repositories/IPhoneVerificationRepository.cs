@@ -2,7 +2,7 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCardBackend.Domain.Repositories;
 
-public interface IPhoneVerificationRepository : IRepository<PhoneVerification>
+public interface IPhoneVerificationRepository : IRepository<PhoneVerification, Guid>
 {
     Task<PhoneVerification> FindLastIsNotConfirmedAsync(
         string phone,

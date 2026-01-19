@@ -5,4 +5,4 @@ namespace SmartCartBackend.Infrastructure.Repositories;
 
 public class IngredientRepository(
     DatabaseContext context) 
-    : Repository<Ingredient>(context), IIngredientRepository;
+    : Repository<Ingredient, int>(context), IIngredientRepository;

@@ -3,7 +3,7 @@ using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;
 
-public class CookingTime : Enumeration
+public class CookingTime : ActualizedEnumeration<CookingTime>
 {
     private CookingTime() {}
 

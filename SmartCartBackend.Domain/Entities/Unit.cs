@@ -6,7 +6,7 @@ namespace SmartCardBackend.Domain.Entities;
 /// <summary>
 /// Доменная модель справочника единицы измерения
 /// </summary>
-public class Unit : Enumeration
+public class Unit : ActualizedEnumeration<Unit>
 {
     private Unit() { }
 
@@ -20,7 +20,21 @@ public class Unit : Enumeration
         ShortTitle = shortTitle;
     }
     
+    /// <summary>
+    /// Сокращенное название
+    /// </summary>
     public string ShortTitle { get; private set; }
+    
+    /// <summary>
+    /// Установка сокращенного названия
+    /// </summary>
+    public void SetShortTitle(string shortTitle) => ShortTitle = shortTitle;
+
+    public override void Actualize(Unit unit)
+    {
+        base.Actualize(unit);
+        SetShortTitle(unit.ShortTitle);
+    }
 
     #region Seeds
     

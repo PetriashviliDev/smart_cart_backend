@@ -8,7 +8,7 @@ namespace SmartCartBackend.Infrastructure.Repositories;
 
 public class DishRepository(
     DatabaseContext context) 
-    : Repository<Dish>(context), IDishRepository
+    : Repository<Dish, int>(context), IDishRepository
 {
     public async Task<List<Dish>> SearchSimilarAsync(
         Vector queryEmbedding, 

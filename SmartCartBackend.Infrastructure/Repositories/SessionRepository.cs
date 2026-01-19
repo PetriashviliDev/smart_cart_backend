@@ -8,7 +8,7 @@ namespace SmartCartBackend.Infrastructure.Repositories;
 public class SessionRepository(
     ISystemClock clock,
     DatabaseContext context) 
-    : Repository<Session>(context), ISessionRepository
+    : Repository<Session, Guid>(context), ISessionRepository
 {
     public async Task<Session> FindLastActiveAsync(
         string phone,

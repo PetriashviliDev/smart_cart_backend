@@ -5,4 +5,4 @@ namespace SmartCartBackend.Infrastructure.Repositories;
 
 public class UserRepository(
     DatabaseContext context) 
-    : Repository<User>(context), IUserRepository;
+    : Repository<User, Guid>(context), IUserRepository;

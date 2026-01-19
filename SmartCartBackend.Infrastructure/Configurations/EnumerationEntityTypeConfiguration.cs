@@ -28,6 +28,10 @@ public class EnumerationEntityTypeConfiguration<TEnumeration>
         builder.Property(x => x.IsDeleted)
             .IsRequired()
             .HasDefaultValue(false);
+        
+        builder.Property(x => x.IsAdded)
+            .IsRequired()
+            .HasDefaultValue(false);
 
         builder.HasIndex(x => x.InternalName)
             .IsUnique();

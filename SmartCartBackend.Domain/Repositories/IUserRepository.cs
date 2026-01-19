@@ -2,4 +2,4 @@ using SmartCardBackend.Domain.Entities;
 
 namespace SmartCardBackend.Domain.Repositories;
 
-public interface IUserRepository : IRepository<User>;
+public interface IUserRepository : IRepository<User, Guid>;

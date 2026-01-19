@@ -6,5 +6,5 @@ public abstract class SeedProvider<TEntity> : ISeedProvider<TEntity>
     where TEntity : Enumeration
 {
     public virtual IEnumerable<TEntity> GetSeeds() =>
-        Enumeration.GetValues<TEntity>();
+        Enumeration.GetSeeds<TEntity>();
 }

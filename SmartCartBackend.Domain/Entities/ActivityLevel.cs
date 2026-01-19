@@ -3,7 +3,7 @@ using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;
 
-public class ActivityLevel : Enumeration
+public class ActivityLevel : ActualizedEnumeration<ActivityLevel>
 {
     private ActivityLevel() { }
 

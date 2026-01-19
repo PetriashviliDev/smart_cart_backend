@@ -7,7 +7,7 @@ namespace SmartCardBackend.Domain.Entities.SeedWork;
 /// Базовая доменная модель
 /// </summary>
 /// <param name="id">Идентификатор</param>
-public abstract class Entity<TIdentifier>(TIdentifier id) : IEventableEntity
+public abstract class Entity<TIdentifier>(TIdentifier id) : IEventable, IHasId<TIdentifier>
 {
     /// <summary>
     /// Идентификатор

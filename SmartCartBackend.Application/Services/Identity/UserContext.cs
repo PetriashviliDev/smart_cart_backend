@@ -47,17 +47,17 @@ public record UserContext
     /// <summary>
     /// Уровень активности
     /// </summary>
-    public string ActivityLevel { get; set; }
+    public Pair<int> ActivityLevel { get; set; }
 
     /// <summary>
     /// Аллергии
     /// </summary>
-    public List<string> Allergies { get; set; }
+    public List<Pair<int>> Allergies { get; set; }
     
     /// <summary>
-    /// Непереносимости
+    /// Не ест
     /// </summary>
-    public string Intolerances { get; set; }
+    public string DoesNotEat { get; set; }
     
     /// <summary>
     /// Ip адрес

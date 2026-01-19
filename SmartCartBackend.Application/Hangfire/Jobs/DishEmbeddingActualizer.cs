@@ -4,6 +4,7 @@ using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Application.Services.Helpers;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities;
+using SmartCardBackend.Domain.Extensions;
 using SmartCartBackend.Common.Clock;
 
 namespace SmartCardBackend.Application.Hangfire.Jobs;

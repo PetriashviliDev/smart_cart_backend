@@ -1,9 +1,10 @@
 using System.Linq.Expressions;
+using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Repositories;
 
-public interface IRepository<TEntity> 
-    where TEntity : class
+public interface IRepository<TEntity, TIdentifier> 
+    where TEntity : class, IHasId<TIdentifier>
 {
     Task<List<TEntity>> FindManyAsync(
         Expression<Func<TEntity, bool>> expression,

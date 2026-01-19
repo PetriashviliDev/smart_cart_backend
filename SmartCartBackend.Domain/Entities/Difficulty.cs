@@ -6,8 +6,7 @@ namespace SmartCardBackend.Domain.Entities;
 /// <summary>
 /// Доменная модель справочника трудности приготовления
 /// </summary>
-public class Difficulty
-    : Enumeration
+public class Difficulty : ActualizedEnumeration<Difficulty>
 {
     private Difficulty() { }
 

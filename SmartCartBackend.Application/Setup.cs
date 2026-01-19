@@ -8,6 +8,7 @@ using SmartCardBackend.Application.AI;
 using SmartCardBackend.Application.Hangfire;
 using SmartCardBackend.Application.Nutrition;
 using SmartCardBackend.Application.Nutrition.Strategies;
+using SmartCardBackend.Application.Services.Actualizers;
 using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Application.Services.Identity;
 using SmartCardBackend.Application.Services.Token;
@@ -51,7 +52,8 @@ public static class Setup
             .AddScoped<IRefreshTokenManager, RefreshTokenManager>()
             .AddScoped<IVerificationTokenManager, VerificationTokenManager>()
             .AddScoped<IPhoneVerificationService, PhoneVerificationService>()
-            .AddScoped<IVerificationCodeSender, SmsVerificationCodeSender>();
+            .AddScoped<IVerificationCodeSender, SmsVerificationCodeSender>()
+            .AddScoped<IEnumerationActualizer, EnumerationActualizer>();
         
         services.Configure<VerificationOptions>(
             configuration.GetSection(nameof(VerificationOptions)));

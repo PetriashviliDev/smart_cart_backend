@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using SmartCardBackend.Application.Constants;
+using SmartCardBackend.Application.Dto;
 using SmartCardBackend.Domain;
 
 namespace SmartCardBackend.Application.Services.Identity;
@@ -23,8 +24,8 @@ public class IdentityService(
         
         var userContext = user.Adapt<UserContext>();
 
-        userContext.ActivityLevel = user.ActivityLevel.Title;
-        userContext.Allergies = user.Allergies.Select(x => x.Allergy.Title).ToList();
+        userContext.ActivityLevel = new Pair<int>(user.ActivityLevel.Id, user.ActivityLevel.Title);
+        userContext.Allergies = user.Allergies.Select(x => new Pair<int>(x.Allergy.Id, x.Allergy.Title)).ToList();
         userContext.IpAddress = GetIpAddress();
         userContext.UserAgent = GetUserAgent();
 

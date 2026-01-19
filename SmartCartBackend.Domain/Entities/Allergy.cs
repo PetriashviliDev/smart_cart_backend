@@ -3,7 +3,7 @@ using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;
 
-public class Allergy : Enumeration
+public class Allergy : ActualizedEnumeration<Allergy>
 {
     private Allergy() { }
     

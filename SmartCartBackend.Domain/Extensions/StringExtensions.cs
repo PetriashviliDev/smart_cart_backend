@@ -1,4 +1,4 @@
-namespace SmartCardBackend.Application.Extensions;
+namespace SmartCardBackend.Domain.Extensions;
 
 public static class StringExtensions
 {

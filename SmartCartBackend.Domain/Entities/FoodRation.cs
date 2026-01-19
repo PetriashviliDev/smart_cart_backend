@@ -3,7 +3,7 @@ using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;
 
-public class FoodRation : Enumeration
+public class FoodRation : ActualizedEnumeration<FoodRation>
 {
     private FoodRation() { }
 
