@@ -11,6 +11,7 @@ public class DishesSearchingPipelineStep(
         NutritionPlanGenerationContext context, 
         CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        context.SimilarDishes = await searcher.SearchSimilarAsync(
+            context.EmbeddingQuery, ct: ct);
     }
 }

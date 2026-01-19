@@ -1,4 +1,4 @@
-using SmartCardBackend.Application.Dto;
+using SmartCardBackend.Application.Responses;
 
 namespace SmartCardBackend.Application.Nutrition;
 
@@ -13,24 +13,29 @@ public record NutritionRequirements
     /// Количество приемов пищи в день
     /// </summary>
     public int MealsCountPerDay { get; set; }
-    
+
+    /// <summary>
+    /// Стратегия рациона
+    /// </summary>
+    public Pair<int> Strategy { get; set; }
+
     /// <summary>
     /// Предпочтения на завтрак
     /// </summary>
-    public List<DishDto> BreakfastPreferences { get; set; }
+    public List<Pair<int>> BreakfastPreferences { get; set; } = [];
     
     /// <summary>
     /// Предпочтения на обед
     /// </summary>
-    public List<DishDto> LunchPreferences { get; set; }
+    public List<Pair<int>> LunchPreferences { get; set; } = [];
     
     /// <summary>
     /// Предпочтения на перекус
     /// </summary>
-    public List<DishDto> SnackPreferences { get; set; }
+    public List<Pair<int>> SnackPreferences { get; set; } = [];
     
     /// <summary>
     /// Предпочтения на ужин
     /// </summary>
-    public List<DishDto> DinnerPreferences { get; set; }
+    public List<Pair<int>> DinnerPreferences { get; set; } = [];
 }

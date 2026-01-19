@@ -1,15 +1,16 @@
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+using SmartCardBackend.Application.Responses;
 
 namespace SmartCardBackend.Application.Nutrition;
 
 public record NutritionMeal
 {
-    public string Type { get; set; }
+    /// <summary>
+    /// Тип приема пищи
+    /// </summary>
+    public Pair<int> Type { get; set; }
 
-    public NutritionDish Dish { get; set; }
-    
-    [JsonProperty("alternative_dishes")]
-    [JsonPropertyName("alternative_dishes")]
-    public List<NutritionDish> AlternativeDishes { get; set; } = [];
+    /// <summary>
+    /// Основные блюда
+    /// </summary>
+    public List<NutritionPlanDish> Dishes { get; set; }
 }

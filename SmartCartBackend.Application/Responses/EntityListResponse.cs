@@ -1,4 +1,4 @@
-namespace SmartCardBackend.Application.Dto;
+namespace SmartCardBackend.Application.Responses;
 
 public record EntityListResponse<TEntity>(List<TEntity> Entities, int Total);
 

@@ -5,6 +5,6 @@ namespace SmartCardBackend.Application.Nutrition.Pipeline;
 public interface INutritionPlanGenerationPipeline
 {
     Task<NutritionPlanGenerationResult> GenerateAsync(
-        NutritionPlanGenerationContext context, 
+        NutritionPlanGenerationRequest request, 
         CancellationToken ct = default);
 }

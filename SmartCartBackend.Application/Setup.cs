@@ -7,15 +7,11 @@ using Newtonsoft.Json.Serialization;
 using SmartCardBackend.Application.AI;
 using SmartCardBackend.Application.Hangfire;
 using SmartCardBackend.Application.Nutrition;
-using SmartCardBackend.Application.Nutrition.Strategies;
 using SmartCardBackend.Application.Services.Actualizers;
+using SmartCardBackend.Application.Services.Embedding;
 using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Application.Services.Identity;
 using SmartCardBackend.Application.Services.Token;
-using SmartCardBackend.Application.Services.Token.Access;
-using SmartCardBackend.Application.Services.Token.Refresh;
-using SmartCardBackend.Application.Services.Token.Verification;
-using SmartCardBackend.Application.Services.Verifications;
 using SmartCartBackend.Common.Clock;
 
 namespace SmartCardBackend.Application;
@@ -33,8 +29,11 @@ public static class Setup
             
         services.AddValidatorsFromAssembly(assembly);
         
-        services.AddAiClients(configuration);
-        services.AddNutritionServices(configuration);
+        services
+            .AddAiClients(configuration)
+            .AddEmbedding(configuration)
+            .AddTokenServices(configuration)
+            .AddNutritionServices();
 
         services.AddHttpContextAccessor();
         
@@ -42,21 +41,9 @@ public static class Setup
 
         services
             .AddTransient<ISystemClock, LocalSystemClock>()
-            .AddTransient<IGuidGenerator, GuidGenerator>();
-
-        services
+            .AddTransient<IGuidGenerator, GuidGenerator>()
             .AddScoped<IIdentityService, IdentityService>()
-            .AddScoped<INutritionStrategy, WeightLossStrategy>()
-            .AddScoped<ITokenManager, TokenManager>()
-            .AddScoped<IAccessTokenManager, AccessTokenManager>()
-            .AddScoped<IRefreshTokenManager, RefreshTokenManager>()
-            .AddScoped<IVerificationTokenManager, VerificationTokenManager>()
-            .AddScoped<IPhoneVerificationService, PhoneVerificationService>()
-            .AddScoped<IVerificationCodeSender, SmsVerificationCodeSender>()
             .AddScoped<IEnumerationActualizer, EnumerationActualizer>();
-        
-        services.Configure<VerificationOptions>(
-            configuration.GetSection(nameof(VerificationOptions)));
 
         services.AddSingleton(_ => new JsonSerializerSettings
         {

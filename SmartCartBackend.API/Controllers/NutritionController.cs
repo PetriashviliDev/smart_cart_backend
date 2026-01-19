@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartCardBackend.Application.Nutrition;
-using SmartCardBackend.Application.Nutrition.Strategies;
+using SmartCardBackend.Application.Nutrition.Pipeline;
+using SmartCardBackend.Application.Nutrition.Pipeline.Models;
 using SmartCardBackend.Application.Services.Identity;
 
 namespace SmartCartBackend.API.Controllers;
@@ -12,7 +13,8 @@ namespace SmartCartBackend.API.Controllers;
 [Authorize]
 public class NutritionController(
     IIdentityService identityService,
-    INutritionStrategy strategy) : ControllerBase
+    INutritionPlanGenerationPipeline pipeline) 
+    : ControllerBase
 {
     [HttpPost("generate-plan")]
     [ProducesResponseType(typeof(NutritionPlan), StatusCodes.Status200OK)]
@@ -20,8 +22,24 @@ public class NutritionController(
         [FromBody] NutritionRequirements requirements)
     {
         var user = await identityService.GetUserContextAsync(HttpContext.RequestAborted);
-        var plan = await strategy.GeneratePlanAsync(user, requirements, HttpContext.RequestAborted);
+
+        var request = new NutritionPlanGenerationRequest
+        {
+            User = user,
+            Requirements = requirements
+        };
+        
+        var plan = await pipeline.GenerateAsync(request, HttpContext.RequestAborted);
         
         return Results.Ok(plan);
+    }
+    
+    [HttpPost("{dishId:int}/ingredients")]
+    [ProducesResponseType(typeof(NutritionPlan), StatusCodes.Status200OK)]
+    public async Task<IResult> GetIngredientsAsync([FromRoute] int dishId)
+    {
+        
+        
+        return Results.Ok();
     }
 }

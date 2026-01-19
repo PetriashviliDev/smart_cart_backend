@@ -1,3 +1,4 @@
+using Mapster;
 using Microsoft.Extensions.Logging;
 using SmartCardBackend.Application.Nutrition.Pipeline.Models;
 using SmartCardBackend.Application.Nutrition.Pipeline.Steps;
@@ -8,29 +9,33 @@ namespace SmartCardBackend.Application.Nutrition.Pipeline;
 public class NutritionPlanGenerationPipeline(
     ILogger<NutritionPlanGenerationPipeline> logger,
     IUnitOfWork uow,
-    IEnumerable<INutritionPlanGenerationPipelineStep> steps) : INutritionPlanGenerationPipeline
+    IEnumerable<INutritionPlanGenerationPipelineStep> steps) 
+    : INutritionPlanGenerationPipeline
 {
     public async Task<NutritionPlanGenerationResult> GenerateAsync(
-        NutritionPlanGenerationContext context, 
+        NutritionPlanGenerationRequest request, 
         CancellationToken ct = default)
     {
-        var localTransactionBegin = await uow.TryBeginTransactionAsync(ct);
+        var context = request.Adapt<NutritionPlanGenerationContext>();
+        
+        await uow.TryBeginTransactionAsync(ct);
 
         try
         {
             foreach (var step in steps)
                 await step.HandleAsync(context, ct);
+
+            await uow.TryCommitTransactionAsync(ct);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Возникла ошибка в RagPipeline");
+            logger.LogError(ex, "Возникла ошибка при создании рациона питания");
             
-            if (localTransactionBegin)
-                await uow.TryRollbackTransactionAsync(ct);
+            await uow.TryRollbackTransactionAsync(ct);
 
             throw;
         }
         
-        return new NutritionPlanGenerationResult();
+        return new NutritionPlanGenerationResult { Plan = context.GeneratedPlan };
     }
 }

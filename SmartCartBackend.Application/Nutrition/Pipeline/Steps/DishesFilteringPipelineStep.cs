@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using SmartCardBackend.Application.Nutrition.Pipeline.Models;
+using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities;
 
@@ -18,5 +19,8 @@ public class DishesFilteringPipelineStep(
 
         var dishes = await uow.DishRepository
             .FindManyAsync(expr, trackingEnabled: false, ct: ct);
+        
+        context.FilteredDishes = dishes.Select(d => 
+            new Pair<int>{ Id = d.Id, Title = d.Title}).ToList();
     }
 }

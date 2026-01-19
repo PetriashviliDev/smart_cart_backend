@@ -1,25 +1,20 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SmartCardBackend.Application.Extensions;
-using SmartCardBackend.Application.Services.Embedding;
+using SmartCardBackend.Application.Nutrition.Pipeline;
+using SmartCardBackend.Application.Nutrition.Pipeline.Steps;
 
 namespace SmartCardBackend.Application.Nutrition;
 
 public static class NutritionSetup
 {
-    public static void AddNutritionServices(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public static void AddNutritionServices(this IServiceCollection services)
     {
-        services.AddHttpClient<IEmbeddingService, EmbeddingService>(cfg =>
-            {
-                var options = configuration.GetSection(
-                    nameof(EmbeddingOptions)).Get<EmbeddingOptions>();
-            
-                cfg.BaseAddress = new Uri(options.BaseAddress);
-                cfg.Timeout = Timeout.InfiniteTimeSpan;
-            })
-            .WithTimeoutPolicyHandler()
-            .WithRetryPolicyHandler();
+        services
+            .AddScoped<INutritionPlanEnricher, NutritionPlanEnricher>()
+            .AddScoped<INutritionPlanGenerationPipeline, NutritionPlanGenerationPipeline>()
+            .AddScoped<INutritionPlanGenerationPipelineStep, QueryBuildingPipelineStep>()
+            .AddScoped<INutritionPlanGenerationPipelineStep, QueryEmbeddingPipelineStep>()
+            .AddScoped<INutritionPlanGenerationPipelineStep, DishesFilteringPipelineStep>()
+            .AddScoped<INutritionPlanGenerationPipelineStep, DishesSearchingPipelineStep>()
+            .AddScoped<INutritionPlanGenerationPipelineStep, GenerationPlanPipelineStep>();
     }
 }

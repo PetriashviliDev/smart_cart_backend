@@ -1,4 +1,4 @@
-using SmartCardBackend.Application.Dto;
+using SmartCardBackend.Application.Responses;
 
 namespace SmartCardBackend.Application.Services.Queries;
 
