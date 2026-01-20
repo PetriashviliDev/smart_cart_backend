@@ -7,8 +7,9 @@ using SmartCardBackend.Domain.Repositories;
 namespace SmartCartBackend.Infrastructure.Repositories;
 
 public class DishRepository(
-    DatabaseContext context) 
-    : Repository<Dish, int>(context), IDishRepository
+    IDatabaseContextFactory contextFactory) 
+    : Repository<Dish, int>(contextFactory), 
+        IDishRepository
 {
     public async Task<List<Dish>> SearchSimilarAsync(
         Vector queryEmbedding, 

@@ -28,16 +28,12 @@ public class IngredientConfiguration : EnumerationEntityTypeConfiguration<Ingred
         builder.Property(x => x.Carbohydrates)
             .IsRequired();
         
-        builder.Property(x => x.Price)
-            .HasPrecision(10, 2)
-            .IsRequired(false);
-        
         builder.HasMany(x => x.DishIngredients)
             .WithOne(x => x.Ingredient)
             .HasForeignKey(x => x.IngredientId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Navigation(x => x.Allergies)
+        builder.Navigation(x => x.IngredientAllergies)
             .AutoInclude();
     }
 }

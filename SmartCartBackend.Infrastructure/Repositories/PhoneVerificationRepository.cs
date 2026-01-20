@@ -7,8 +7,9 @@ namespace SmartCartBackend.Infrastructure.Repositories;
 
 public class PhoneVerificationRepository(
     ISystemClock clock,
-    DatabaseContext context)
-    : Repository<PhoneVerification, Guid>(context), IPhoneVerificationRepository
+    IDatabaseContextFactory contextFactory)
+    : Repository<PhoneVerification, Guid>(contextFactory), 
+        IPhoneVerificationRepository
 {
     public async Task<PhoneVerification> FindLastIsNotConfirmedAsync(
         string phone, 

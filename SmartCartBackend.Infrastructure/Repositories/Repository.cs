@@ -6,11 +6,11 @@ using SmartCardBackend.Domain.Repositories;
 namespace SmartCartBackend.Infrastructure.Repositories;
 
 public abstract class Repository<TEntity, TIdentifier>(
-    DatabaseContext context) 
+    IDatabaseContextFactory contextFactory) 
     : IRepository<TEntity, TIdentifier> 
     where TEntity : class, IHasId<TIdentifier>
 {
-    protected DatabaseContext Context => context;
+    protected DatabaseContext Context => contextFactory.GetOrCreateDbContext();
     
     protected virtual DbSet<TEntity> Set => Context.Set<TEntity>();
     

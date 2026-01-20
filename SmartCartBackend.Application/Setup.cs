@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SmartCardBackend.Application.AI;
 using SmartCardBackend.Application.Hangfire;
+using SmartCardBackend.Application.Mapping;
 using SmartCardBackend.Application.Nutrition;
 using SmartCardBackend.Application.Services.Actualizers;
 using SmartCardBackend.Application.Services.Embedding;
@@ -38,7 +39,9 @@ public static class Setup
 
         services.AddHttpContextAccessor();
         
-        services.ConfigureHangfire(configuration);
+        services
+            .ConfigureMapster(assembly)
+            .ConfigureHangfire(configuration);
 
         services
             .AddTransient<ISystemClock, LocalSystemClock>()

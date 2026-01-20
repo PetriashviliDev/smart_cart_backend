@@ -1,13 +1,13 @@
 using System.Security.Claims;
-using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Http;
 using SmartCardBackend.Application.Constants;
-using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Domain;
 
 namespace SmartCardBackend.Application.Services.Identity;
 
 public class IdentityService(
+    IMapper mapper,
     IUnitOfWork unitOfWork,
     IHttpContextAccessor contextAccessor) : IIdentityService
 {
@@ -25,26 +25,7 @@ public class IdentityService(
                 trackingEnabled: false, 
                 ct);
         
-        var userContext = user.Adapt<UserContext>();
-
-        userContext.ActivityLevel = new Pair<int>
-        {
-            Id = user.ActivityLevel.Id, 
-            Title = user.ActivityLevel.Title
-        };
-        
-        userContext.Allergies = user.Allergies
-            .Select(x => new Pair<int>
-            {
-                Id = x.Allergy.Id, 
-                Title = x.Allergy.Title
-            })
-            .ToList();
-        
-        userContext.IpAddress = GetIpAddress();
-        userContext.UserAgent = GetUserAgent();
-
-        return userContext;
+        return mapper.Map<UserContext>(user);
     }
 
     public string GetIpAddress() =>

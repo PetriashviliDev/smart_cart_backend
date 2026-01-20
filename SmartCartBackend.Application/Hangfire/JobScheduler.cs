@@ -28,7 +28,7 @@ public class JobScheduler(
             .GetMethod(nameof(ScheduleRecurringJob), [typeof(string)]);
         
         var genericScheduleMethod = scheduleMethod?.MakeGenericMethod(jobType);
-        genericScheduleMethod?.Invoke(null, [cron]);
+        genericScheduleMethod?.Invoke(this, [cron]);
     }
 
     public void ScheduleDelayedJob<TJob>(TimeSpan delay) 

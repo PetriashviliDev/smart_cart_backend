@@ -20,10 +20,6 @@ public class DishConfiguration : EnumerationEntityTypeConfiguration<Dish>
             .HasMaxLength(128)
             .IsRequired();
         
-        builder.Property(x => x.Price)
-            .HasPrecision(10, 2)
-            .IsRequired(false);
-        
         builder.Property(x => x.Portions)
             .IsRequired();
         

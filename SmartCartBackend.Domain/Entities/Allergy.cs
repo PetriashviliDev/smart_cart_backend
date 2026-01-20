@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
@@ -6,12 +7,37 @@ namespace SmartCardBackend.Domain.Entities;
 public class Allergy : ActualizedEnumeration<Allergy>
 {
     private Allergy() { }
-    
+
     public Allergy(
         int id,
         string title,
-        [CallerMemberName] string callerName = null) 
-        : base(id, title, callerName) { }
+        List<IngredientAllergy> ingredientAllergies,
+        [CallerMemberName] string callerName = null)
+        : base(id, title, callerName)
+    {
+        _ingredientAllergies = ingredientAllergies;
+    }
+
+    public Allergy(
+        int id,
+        string title,
+        [CallerMemberName] string callerName = null)
+        : base(id, title, callerName)
+    {
+        _ingredientAllergies = [];
+    }
+    
+    /// <summary>
+    /// Связь с ингредиентами
+    /// </summary>
+    public IReadOnlyCollection<IngredientAllergy> IngredientAllergies => _ingredientAllergies.AsReadOnly();
+    private readonly List<IngredientAllergy> _ingredientAllergies;
+    
+    /// <summary>
+    /// Ингредиенты
+    /// </summary>
+    [NotMapped]
+    public List<Ingredient> Ingredients => _ingredientAllergies.Select(x => x.Ingredient).ToList();
     
     #region Seeds
 

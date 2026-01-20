@@ -6,5 +6,5 @@ public record VerificationResult
     
     public string Message { get; init; }
     
-    public string Token { get; init; }
+    public string VerificationToken { get; init; }
 }

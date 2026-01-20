@@ -4,5 +4,6 @@ using SmartCardBackend.Domain.Repositories;
 namespace SmartCartBackend.Infrastructure.Repositories;
 
 public class UserRepository(
-    DatabaseContext context) 
-    : Repository<User, Guid>(context), IUserRepository;
+    IDatabaseContextFactory contextFactory) 
+    : Repository<User, Guid>(contextFactory), 
+        IUserRepository;

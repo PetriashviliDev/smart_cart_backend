@@ -15,7 +15,7 @@ public class EmbeddingService(
         var json = JsonConvert.SerializeObject(request, jsonSerializerSettings);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         
-        var response = await client.PostAsync("/embed", content, ct);
+        var response = await client.PostAsync("embed", content, ct);
 
         if (!response.IsSuccessStatusCode)
         {

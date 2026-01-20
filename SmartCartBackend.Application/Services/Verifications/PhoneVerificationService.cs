@@ -125,7 +125,7 @@ public class PhoneVerificationService(
         {
             Success = true,
             Message = "Телефон успешно подтвержден",
-            Token = verificationTokenResult.Token
+            VerificationToken = verificationTokenResult.Token
         };
     }
 

@@ -22,12 +22,12 @@ public class IngredientAllergyConfiguration : IEntityTypeConfiguration<Ingredien
             .IsRequired();
         
         builder.HasOne(x => x.Ingredient)
-            .WithMany()
+            .WithMany(x => x.IngredientAllergies)
             .HasForeignKey(x => x.IngredientId)
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(x => x.Allergy)
-            .WithMany()
+            .WithMany(x => x.IngredientAllergies)
             .HasForeignKey(x => x.AllergyId)
             .OnDelete(DeleteBehavior.Cascade);
             

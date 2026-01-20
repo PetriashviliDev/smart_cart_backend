@@ -13,13 +13,14 @@ public class DishEmbeddingActualizer(
     ISystemClock clock,
     IGuidGenerator guidGenerator,
     IEmbeddingService embeddingService,
-    IUnitOfWork uow) : IJob
+    IUnitOfWork uow) 
+    : IJob
 {
     public async Task ExecuteAsync(CancellationToken ct)
     {
         var now = clock.Now;
 
-        var dishes = await uow.DishRepository.FindManyAsync(_ => true, ct: ct);
+        var dishes = (await uow.DishRepository.FindManyAsync(_ => true, ct: ct)).Take(2);
         foreach (var dish in dishes)
         {
             var hash = HashHelper.ComputeSha256(dish.Description);

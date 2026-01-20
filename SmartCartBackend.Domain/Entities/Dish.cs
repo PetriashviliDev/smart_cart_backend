@@ -25,7 +25,6 @@ public class Dish : DisplayEnumeration
         string image,
         int categoryId,
         int portions,
-        decimal? price,
         Difficulty difficulty,
         DishCategory dishCategory,
         List<DishIngredient> dishIngredients,
@@ -38,7 +37,6 @@ public class Dish : DisplayEnumeration
         DifficultyId = difficultyId;
         CategoryId = categoryId;
         Portions = portions;
-        Price = price;
         Difficulty = difficulty;
         DishCategory = dishCategory;
         _dishIngredients = dishIngredients;
@@ -55,7 +53,6 @@ public class Dish : DisplayEnumeration
         string image,
         int categoryId,
         int portions,
-        decimal? price,
         [CallerMemberName] string callerName = null) 
         : base(id, title, description, image, callerName)
     {
@@ -64,7 +61,6 @@ public class Dish : DisplayEnumeration
         DifficultyId = difficultyId;
         CategoryId = categoryId;
         Portions = portions;
-        Price = price;
         _dishIngredients = [];
     }
 
@@ -77,11 +73,10 @@ public class Dish : DisplayEnumeration
         int difficultyId,
         string image,
         int categoryId,
-        int portions,
-        decimal? price)
+        int portions)
     {
         var dish = new Dish(id, title, description, recipe,
-            cookingTime, difficultyId, image, categoryId, portions, price);
+            cookingTime, difficultyId, image, categoryId, portions);
         
         return dish;
     }
@@ -114,11 +109,6 @@ public class Dish : DisplayEnumeration
     /// Количество порций
     /// </summary>
     public int Portions { get; private set; }
-
-    /// <summary>
-    /// Цена
-    /// </summary>
-    public decimal? Price { get; private set; }
 
     /// <summary>
     /// Трудность приготовления

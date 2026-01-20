@@ -36,13 +36,8 @@ public class DishEmbeddingConfiguration : IEntityTypeConfiguration<DishEmbedding
             .IsRequired();
         
         builder.Property(x => x.Embedding)
-            .HasMaxLength(384)
+            .HasColumnType("vector(384)")
             .IsRequired();
-        
-        builder.HasOne<Dish>()
-            .WithOne()
-            .HasForeignKey<DishEmbedding>(x => x.DishId)
-            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(x => x.Model);
         builder.HasIndex(x => new { x.Model, x.TextVersion });

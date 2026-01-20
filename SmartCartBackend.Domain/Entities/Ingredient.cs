@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using SmartCardBackend.Domain.Entities.SeedWork;
@@ -23,9 +24,8 @@ public class Ingredient : DisplayEnumeration
         decimal proteins, 
         decimal fats, 
         decimal carbohydrates,
-        decimal? price,
         List<DishIngredient> dishIngredients,
-        List<Allergy> allergies,
+        List<IngredientAllergy> ingredientAllergies,
         [CallerMemberName] string callerName = null) 
         : base(id, title, description, image, callerName)
     {
@@ -33,9 +33,8 @@ public class Ingredient : DisplayEnumeration
         Proteins = proteins;
         Fats = fats;
         Carbohydrates = carbohydrates;
-        Price = price;
         _dishIngredients = dishIngredients;
-        _allergies = allergies;
+        _ingredientAllergies = ingredientAllergies;
     }
     
     private Ingredient(
@@ -47,7 +46,6 @@ public class Ingredient : DisplayEnumeration
         decimal proteins, 
         decimal fats, 
         decimal carbohydrates,
-        decimal? price,
         [CallerMemberName] string callerName = null) 
         : base(id, title, description, image, callerName)
     {
@@ -55,9 +53,8 @@ public class Ingredient : DisplayEnumeration
         Proteins = proteins;
         Fats = fats;
         Carbohydrates = carbohydrates;
-        Price = price;
         _dishIngredients = [];
-        _allergies = [];
+        _ingredientAllergies = [];
     }
 
     public static Ingredient Create(
@@ -68,11 +65,10 @@ public class Ingredient : DisplayEnumeration
         decimal calories,
         decimal proteins,
         decimal fats,
-        decimal carbohydrates,
-        decimal? price)
+        decimal carbohydrates)
     {
         var ingredient = new Ingredient(id, title, description,
-            image, calories, proteins, fats, carbohydrates, price);
+            image, calories, proteins, fats, carbohydrates);
         
         return ingredient;
     }
@@ -102,23 +98,22 @@ public class Ingredient : DisplayEnumeration
     public decimal Carbohydrates { get; private set; }
 
     /// <summary>
-    /// Цена за 100 г.
-    /// </summary>
-    public decimal? Price { get; private set; }
-
-    /// <summary>
     /// Связи блюда и ингредиентов
     /// </summary>
     public IReadOnlyCollection<DishIngredient> DishIngredients => _dishIngredients.AsReadOnly();
-
     private readonly List<DishIngredient> _dishIngredients;
 
     /// <summary>
+    /// Связь с аллергиями
+    /// </summary>
+    public IReadOnlyCollection<IngredientAllergy> IngredientAllergies => _ingredientAllergies.AsReadOnly();
+    private readonly List<IngredientAllergy> _ingredientAllergies;
+    
+    /// <summary>
     /// Аллергии
     /// </summary>
-    public IReadOnlyCollection<Allergy> Allergies => _allergies.AsReadOnly();
-
-    private readonly List<Allergy> _allergies;
+    [NotMapped]
+    public List<Allergy> Allergies => _ingredientAllergies.Select(x => x.Allergy).ToList();
     
     #endregion Properties
 }

@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Repositories;
@@ -6,18 +5,18 @@ using SmartCardBackend.Domain.Repositories;
 namespace SmartCartBackend.Infrastructure;
 
 public class UnitOfWork(
-    IDbContextFactory<DatabaseContext> contextFactory,
+    IDatabaseContextFactory contextFactory,
     IIngredientRepository ingredientRepository,
     IUserRepository userRepository,
     IPhoneVerificationRepository phoneVerificationRepository,
     ISessionRepository sessionRepository, 
     IUserAiRequestRepository userAiRequestRepository, 
-    IDishRepository dishRepository) : IUnitOfWork
+    IDishRepository dishRepository) 
+    : IUnitOfWork
 {
     private IDbContextTransaction _transaction;
 
-    private DatabaseContext _context;
-    public DatabaseContext Context => _context ??= contextFactory.CreateDbContext();
+    public DatabaseContext Context => contextFactory.GetOrCreateDbContext();
     
     public IIngredientRepository IngredientRepository { get; } = ingredientRepository;
     

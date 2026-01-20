@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Mapster;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartCardBackend.Application.Constants;
@@ -18,6 +18,7 @@ namespace SmartCartBackend.API.Authentication;
 
 public class AuthenticationService(
     ILogger<AuthenticationService> logger,
+    IMapper mapper,
     IIdentityService identityService,
     IUnitOfWork unitOfWork,
     IAccessTokenManager accessTokenManager,
@@ -155,7 +156,7 @@ public class AuthenticationService(
             AccessTokenExpiresAt = accessToken.ExpiresAt,
             RefreshToken = refreshToken.Token,
             RefreshTokenExpiresAt = refreshToken.ExpiresAt,
-            User = user.Adapt<UserContext>()
+            User = mapper.Map<UserContext>(user)
         };
     }
 }
