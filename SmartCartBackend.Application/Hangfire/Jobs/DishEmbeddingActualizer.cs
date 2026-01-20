@@ -10,6 +10,7 @@ using SmartCartBackend.Common.Extensions;
 namespace SmartCardBackend.Application.Hangfire.Jobs;
 
 public class DishEmbeddingActualizer(
+    IEmbeddingTextBuilder<Dish> embeddingTextBuilder,
     ISystemClock clock,
     IGuidGenerator guidGenerator,
     IEmbeddingService embeddingService,
@@ -20,15 +21,16 @@ public class DishEmbeddingActualizer(
     {
         var now = clock.Now;
 
-        var dishes = (await uow.DishRepository.FindManyAsync(_ => true, ct: ct)).Take(2);
+        var dishes = await uow.DishRepository.FindManyAsync(_ => true, ct: ct);
         foreach (var dish in dishes)
         {
-            var hash = HashHelper.ComputeSha256(dish.Description);
+            var embeddingText = embeddingTextBuilder.BuildFor(dish);
+            var hash = HashHelper.ComputeSha256(embeddingText);
 
             if (dish.DishEmbedding == null)
             {
                 var embeddingResult = await embeddingService.EmbedAsync(
-                    new EmbedRequest(dish.Description), ct);
+                    new EmbedRequest(embeddingText), ct);
 
                 var dishEmbedding = DishEmbedding.Create(
                     guidGenerator.NewGuid,
@@ -45,7 +47,7 @@ public class DishEmbeddingActualizer(
             else if (!dish.DishEmbedding.ContentHash.EqualsIgnoreCase(hash))
             {
                 var embeddingResult = await embeddingService.EmbedAsync(
-                    new EmbedRequest(dish.Description), ct);
+                    new EmbedRequest(embeddingText), ct);
 
                 dish.DishEmbedding.Update(
                     embeddingResult.Model,

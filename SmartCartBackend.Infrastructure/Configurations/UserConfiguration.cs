@@ -50,7 +50,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasDateTimeOffsetConversion()
             .IsRequired();
         
-        builder.Property(x => x.Intolerances)
+        builder.Property(x => x.ExcludedProducts)
             .HasMaxLength(512)
             .IsRequired(false);
         

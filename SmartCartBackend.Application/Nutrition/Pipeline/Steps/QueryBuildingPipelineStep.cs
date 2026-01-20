@@ -9,16 +9,16 @@ public class QueryBuildingPipelineStep : INutritionPlanGenerationPipelineStep
         CancellationToken ct = default)
     {
         var breakfastPreferences = string.Join(", ", 
-            context.Requirements.BreakfastPreferences.Select(p => p.Title));
+            context.User.BreakfastPreferences.Select(p => p.Title));
         
         var lunchPreferences = string.Join(", ", 
-            context.Requirements.LunchPreferences.Select(p => p.Title));
+            context.User.LunchPreferences.Select(p => p.Title));
         
         var snackPreferences = string.Join(", ", 
-            context.Requirements.SnackPreferences.Select(p => p.Title));
+            context.User.SnackPreferences.Select(p => p.Title));
         
         var dinnerPreferences = string.Join(", ", 
-            context.Requirements.DinnerPreferences.Select(p => p.Title));
+            context.User.DinnerPreferences.Select(p => p.Title));
         
         context.RawQuery = $$"""
                              - Цель: {{context.Requirements.Strategy.Title}}

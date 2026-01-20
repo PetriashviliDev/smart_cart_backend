@@ -6,6 +6,8 @@ namespace SmartCardBackend.Domain.Entities;
 
 public class Allergy : ActualizedEnumeration<Allergy>
 {
+    #region Constructors
+    
     private Allergy() { }
 
     public Allergy(
@@ -26,6 +28,8 @@ public class Allergy : ActualizedEnumeration<Allergy>
     {
         _ingredientAllergies = [];
     }
+
+    #endregion Constructors
     
     /// <summary>
     /// Связь с ингредиентами

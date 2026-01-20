@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SmartCardBackend.Application.AI;
 using SmartCardBackend.Application.Hangfire;
+using SmartCardBackend.Application.HostedServices;
 using SmartCardBackend.Application.Mapping;
 using SmartCardBackend.Application.Nutrition;
 using SmartCardBackend.Application.Services.Actualizers;
@@ -37,7 +38,9 @@ public static class Setup
             .AddTokenServices(configuration)
             .AddNutritionServices();
 
-        services.AddHttpContextAccessor();
+        services
+            .AddHostedServices()
+            .AddHttpContextAccessor();
         
         services
             .ConfigureMapster(assembly)

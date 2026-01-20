@@ -26,12 +26,12 @@ public class DishIngredientConfiguration : IEntityTypeConfiguration<DishIngredie
         builder.HasOne(x => x.Dish)
             .WithMany(x => x.DishIngredients)
             .HasForeignKey(x => x.DishId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
             
         builder.HasOne(x => x.Ingredient)
             .WithMany(x => x.DishIngredients)
             .HasForeignKey(x => x.IngredientId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
             
         builder.HasIndex(x => new { x.DishId, x.IngredientId })
             .IsUnique();

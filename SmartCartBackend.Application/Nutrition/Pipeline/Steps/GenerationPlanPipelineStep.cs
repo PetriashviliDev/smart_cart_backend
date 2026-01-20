@@ -110,7 +110,7 @@ public class GenerationPlanPipelineStep(
         NutritionRequirements requirements)
     {
         var allergies = user.Allergies.Count > 0 ? string.Join(", ", user.Allergies) : "Нет";
-        var doesNotEat = !string.IsNullOrWhiteSpace(user.DoesNotEat) ? user.DoesNotEat : "Никакие";
+        var doesNotEat = !string.IsNullOrWhiteSpace(user.ExcludedProducts) ? user.ExcludedProducts : "Никакие";
 
         return $$"""
                  ПОЛЬЗОВАТЕЛЬ:

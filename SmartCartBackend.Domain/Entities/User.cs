@@ -19,7 +19,7 @@ public class User : Entity<Guid>
         int age,
         double height,
         double weight,
-        string intolerances,
+        string excludedProducts,
         List<UserAllergy> allergies,
         List<UserPreference> preferences,
         int activityLevelId,
@@ -32,7 +32,7 @@ public class User : Entity<Guid>
         Age = age;
         Height = height;
         Weight = weight;
-        Intolerances = intolerances;
+        ExcludedProducts = excludedProducts;
         Allergies = allergies;
         Preferences = preferences;
         ActivityLevelId = activityLevelId;
@@ -48,7 +48,7 @@ public class User : Entity<Guid>
         int age,
         double height,
         double weight,
-        string intolerances,
+        string excludedProducts,
         List<UserAllergy> allergies,
         List<UserPreference> preferences,
         int activityLevelId) : base(id)
@@ -60,7 +60,7 @@ public class User : Entity<Guid>
         Age = age;
         Height = height;
         Weight = weight;
-        Intolerances = intolerances;
+        ExcludedProducts = excludedProducts;
         Allergies = allergies;
         Preferences = preferences;
         ActivityLevelId = activityLevelId;
@@ -75,7 +75,7 @@ public class User : Entity<Guid>
         int age, 
         double height, 
         double weight,
-        string intolerances,
+        string excludedProducts,
         List<UserAllergy> allergies,
         List<UserPreference> preferences,
         int activityLevelId)
@@ -89,7 +89,7 @@ public class User : Entity<Guid>
             age, 
             height, 
             weight,
-            intolerances, 
+            excludedProducts, 
             allergies,
             preferences,
             activityLevelId);
@@ -147,9 +147,9 @@ public class User : Entity<Guid>
     public DateTimeOffset RefreshTokenExpiry { get; private set; }
 
     /// <summary>
-    /// Непереносимости
+    /// Исключенные продукты
     /// </summary>
-    public string Intolerances { get; private set; }
+    public string ExcludedProducts { get; private set; }
 
     /// <summary>
     /// Предпочтения

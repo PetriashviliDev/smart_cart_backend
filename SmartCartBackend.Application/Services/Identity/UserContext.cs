@@ -55,9 +55,9 @@ public record UserContext
     public List<Pair<int>> Allergies { get; set; }
     
     /// <summary>
-    /// Не ест
+    /// Исключенные продукты
     /// </summary>
-    public string DoesNotEat { get; set; }
+    public string ExcludedProducts { get; set; }
     
     /// <summary>
     /// Ip адрес
@@ -68,4 +68,24 @@ public record UserContext
     /// Устройство
     /// </summary>
     public string UserAgent { get; set; }
+    
+    /// <summary>
+    /// Предпочтения на завтрак
+    /// </summary>
+    public List<Pair<int>> BreakfastPreferences { get; set; } = [];
+    
+    /// <summary>
+    /// Предпочтения на обед
+    /// </summary>
+    public List<Pair<int>> LunchPreferences { get; set; } = [];
+    
+    /// <summary>
+    /// Предпочтения на перекус
+    /// </summary>
+    public List<Pair<int>> SnackPreferences { get; set; } = [];
+    
+    /// <summary>
+    /// Предпочтения на ужин
+    /// </summary>
+    public List<Pair<int>> DinnerPreferences { get; set; } = [];
 }

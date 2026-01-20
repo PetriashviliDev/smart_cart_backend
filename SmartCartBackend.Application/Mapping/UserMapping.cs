@@ -10,10 +10,22 @@ public class UserMapping : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<User, UserContext>()
+            .Map(dest => dest.BreakfastPreferences, src => src.Preferences
+                .Where(p => p.MealTypeId == MealType.Breakfast.Id)
+                .Select(p => p.Adapt<Pair<int>>()))
+            .Map(dest => dest.LunchPreferences, src => src.Preferences
+                .Where(p => p.MealTypeId == MealType.Lunch.Id)
+                .Select(p => p.Adapt<Pair<int>>()))
+            .Map(dest => dest.SnackPreferences, src => src.Preferences
+                .Where(p => p.MealTypeId == MealType.Snack.Id)
+                .Select(p => p.Adapt<Pair<int>>()))
+            .Map(dest => dest.DinnerPreferences, src => src.Preferences
+                .Where(p => p.MealTypeId == MealType.Dinner.Id)
+                .Select(p => p.Adapt<Pair<int>>()))
             .AfterMapping((_, dest) =>
             {
-                var context = config.BuildAdapter().CreateMapContextScope().Context;
-                var identityService = context.GetService<IIdentityService>();
+                using var scope = config.BuildAdapter().CreateMapContextScope();
+                var identityService = scope.Context.GetService<IIdentityService>();
                 
                 dest.IpAddress = identityService.GetIpAddress();
                 dest.UserAgent = identityService.GetUserAgent();

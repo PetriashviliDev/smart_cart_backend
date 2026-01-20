@@ -42,6 +42,11 @@ public class DishConfiguration : EnumerationEntityTypeConfiguration<Dish>
         builder.HasOne(x => x.DishEmbedding)
             .WithOne()
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne(x => x.MealType)
+            .WithMany()
+            .HasForeignKey(x => x.MealTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Navigation(x => x.Difficulty)
             .AutoInclude();
@@ -50,6 +55,12 @@ public class DishConfiguration : EnumerationEntityTypeConfiguration<Dish>
             .AutoInclude();
         
         builder.Navigation(x => x.DishEmbedding)
+            .AutoInclude();
+        
+        builder.Navigation(x => x.MealType)
+            .AutoInclude();
+        
+        builder.Navigation(x => x.DishTags)
             .AutoInclude();
     }
 }

@@ -25,10 +25,13 @@ public class Dish : DisplayEnumeration
         string image,
         int categoryId,
         int portions,
+        int mealTypeId,
         Difficulty difficulty,
         DishCategory dishCategory,
         List<DishIngredient> dishIngredients,
         DishEmbedding dishEmbedding,
+        List<DishTag> dishTags,
+        MealType mealType,
         [CallerMemberName] string callerName = null) 
         : base(id, title, description, image, callerName)
     {
@@ -37,10 +40,13 @@ public class Dish : DisplayEnumeration
         DifficultyId = difficultyId;
         CategoryId = categoryId;
         Portions = portions;
+        MealTypeId = mealTypeId;
         Difficulty = difficulty;
         DishCategory = dishCategory;
         _dishIngredients = dishIngredients;
         DishEmbedding = dishEmbedding;
+        _dishTags = dishTags;
+        MealType = mealType;
     }
     
     private Dish(
@@ -53,6 +59,7 @@ public class Dish : DisplayEnumeration
         string image,
         int categoryId,
         int portions,
+        int mealTypeId,
         [CallerMemberName] string callerName = null) 
         : base(id, title, description, image, callerName)
     {
@@ -61,7 +68,9 @@ public class Dish : DisplayEnumeration
         DifficultyId = difficultyId;
         CategoryId = categoryId;
         Portions = portions;
+        MealTypeId = mealTypeId;
         _dishIngredients = [];
+        _dishTags = [];
     }
 
     public static Dish Create(
@@ -73,10 +82,11 @@ public class Dish : DisplayEnumeration
         int difficultyId,
         string image,
         int categoryId,
-        int portions)
+        int portions, 
+        int mealTypeId)
     {
-        var dish = new Dish(id, title, description, recipe,
-            cookingTime, difficultyId, image, categoryId, portions);
+        var dish = new Dish(id, title, description, recipe, cookingTime, 
+            difficultyId, image, categoryId, portions, mealTypeId);
         
         return dish;
     }
@@ -111,21 +121,36 @@ public class Dish : DisplayEnumeration
     public int Portions { get; private set; }
 
     /// <summary>
+    /// Идентификатор типа приема
+    /// </summary>
+    public int MealTypeId { get; private set; }
+
+    /// <summary>
     /// Трудность приготовления
     /// </summary>
-    public Difficulty Difficulty { get; private set; }
+    public Difficulty Difficulty { get; }
     
     /// <summary>
     /// Категория
     /// </summary>
-    public DishCategory DishCategory { get; private set; }
+    public DishCategory DishCategory { get; }
+
+    /// <summary>
+    /// Тип приема
+    /// </summary>
+    public MealType MealType { get; }
 
     /// <summary>
     /// Связи блюда и ингредиентов
     /// </summary>
     public IReadOnlyCollection<DishIngredient> DishIngredients => _dishIngredients.AsReadOnly();
-
     private readonly List<DishIngredient> _dishIngredients;
+    
+    /// <summary>
+    /// Связи блюда и тегов
+    /// </summary>
+    public IReadOnlyCollection<DishTag> DishTags => _dishTags.AsReadOnly();
+    private readonly List<DishTag> _dishTags;
 
     /// <summary>
     /// Связь с векторным представлением
@@ -136,7 +161,13 @@ public class Dish : DisplayEnumeration
     /// Ингредиенты
     /// </summary>
     [NotMapped]
-    public List<Ingredient> Ingredients => DishIngredients.Select(x => x.Ingredient).ToList();
+    public List<Ingredient> Ingredients => _dishIngredients.Select(x => x.Ingredient).ToList();
+    
+    /// <summary>
+    /// Теги
+    /// </summary>
+    [NotMapped]
+    public List<Tag> Tags => _dishTags.Select(x => x.Tag).ToList();
     
     /// <summary>
     /// Общее количество калорий
