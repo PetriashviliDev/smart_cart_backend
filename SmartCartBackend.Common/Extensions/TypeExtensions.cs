@@ -1,4 +1,4 @@
-namespace SmartCardBackend.Domain.Extensions;
+namespace SmartCartBackend.Common.Extensions;
 
 public static class TypeExtensions
 {

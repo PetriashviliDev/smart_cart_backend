@@ -13,7 +13,7 @@ public static class Setup
         this IServiceCollection services, 
         IConfiguration configuration)
     {
-        services.AddDbContext<DatabaseContext>(options =>
+        services.AddDbContextFactory<DatabaseContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString(nameof(DatabaseContext)));
         });

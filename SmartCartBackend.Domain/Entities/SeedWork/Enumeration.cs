@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using CaseConverter;
-using SmartCardBackend.Domain.Extensions;
+using SmartCartBackend.Common.Extensions;
 
 namespace SmartCardBackend.Domain.Entities.SeedWork;
 

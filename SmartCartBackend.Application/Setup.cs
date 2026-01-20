@@ -11,6 +11,7 @@ using SmartCardBackend.Application.Services.Actualizers;
 using SmartCardBackend.Application.Services.Embedding;
 using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Application.Services.Identity;
+using SmartCardBackend.Application.Services.Searchers;
 using SmartCardBackend.Application.Services.Token;
 using SmartCartBackend.Common.Clock;
 
@@ -43,7 +44,8 @@ public static class Setup
             .AddTransient<ISystemClock, LocalSystemClock>()
             .AddTransient<IGuidGenerator, GuidGenerator>()
             .AddScoped<IIdentityService, IdentityService>()
-            .AddScoped<IEnumerationActualizer, EnumerationActualizer>();
+            .AddScoped<IEnumerationActualizer, EnumerationActualizer>()
+            .AddScoped<IDishSearcher, DishSearcher>();
 
         services.AddSingleton(_ => new JsonSerializerSettings
         {

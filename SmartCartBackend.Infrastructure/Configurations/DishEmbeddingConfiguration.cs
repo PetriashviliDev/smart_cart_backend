@@ -34,9 +34,9 @@ public class DishEmbeddingConfiguration : IEntityTypeConfiguration<DishEmbedding
         builder.Property(x => x.UpdatedAt)
             .HasDateTimeOffsetConversion()
             .IsRequired();
-
+        
         builder.Property(x => x.Embedding)
-            .HasColumnType("vector(384)")
+            .HasMaxLength(384)
             .IsRequired();
         
         builder.HasOne<Dish>()
@@ -46,6 +46,10 @@ public class DishEmbeddingConfiguration : IEntityTypeConfiguration<DishEmbedding
 
         builder.HasIndex(x => x.Model);
         builder.HasIndex(x => new { x.Model, x.TextVersion });
+        
+        builder.HasIndex(e => e.Embedding)
+            .HasMethod("ivfflat")
+            .HasOperators("vector_cosine_ops");
         
         builder.HasIndex(x => x.DishId)
             .IsUnique();

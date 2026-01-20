@@ -40,15 +40,15 @@ var app = builder.Build();
 app.UseRouting();
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHangfire(
     app.Services.GetRequiredService<IJobScheduler>(), 
     app.Configuration);
 
 if (app.Environment.IsDevelopment())
     app.UseSwaggerCommon();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapDefaultEndpoints();
 app.MapControllers();

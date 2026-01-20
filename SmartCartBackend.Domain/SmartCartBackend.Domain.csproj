@@ -12,5 +12,9 @@
         <PackageReference Include="MediatR" Version="13.0.0" />
         <PackageReference Include="Pgvector.EntityFrameworkCore" Version="0.2.2" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SmartCartBackend.Common\SmartCartBackend.Common.csproj" />
+    </ItemGroup>
 
 </Project>

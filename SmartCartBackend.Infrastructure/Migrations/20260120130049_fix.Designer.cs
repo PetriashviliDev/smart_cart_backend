@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pgvector;
@@ -12,9 +13,11 @@ using SmartCartBackend.Infrastructure;
 namespace SmartCartBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260120130049_fix")]
+    partial class fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -510,7 +513,6 @@ namespace SmartCartBackend.Infrastructure.Migrations
 
                     b.Property<Vector>("Embedding")
                         .IsRequired()
-                        .HasMaxLength(384)
                         .HasColumnType("vector(384)");
 
                     b.Property<string>("Model")
@@ -531,11 +533,6 @@ namespace SmartCartBackend.Infrastructure.Migrations
 
                     b.HasIndex("DishId1")
                         .IsUnique();
-
-                    b.HasIndex("Embedding");
-
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Embedding"), "ivfflat");
-                    NpgsqlIndexBuilderExtensions.HasOperators(b.HasIndex("Embedding"), new[] { "vector_cosine_ops" });
 
                     b.HasIndex("Model");
 
