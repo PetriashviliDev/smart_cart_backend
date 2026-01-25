@@ -24,6 +24,8 @@ public class Ingredient : DisplayEnumeration
         decimal proteins, 
         decimal fats, 
         decimal carbohydrates,
+        int categoryId,
+        IngredientCategory category,
         List<DishIngredient> dishIngredients,
         List<IngredientAllergy> ingredientAllergies,
         [CallerMemberName] string callerName = null) 
@@ -33,6 +35,8 @@ public class Ingredient : DisplayEnumeration
         Proteins = proteins;
         Fats = fats;
         Carbohydrates = carbohydrates;
+        CategoryId = categoryId;
+        Category = category;
         _dishIngredients = dishIngredients;
         _ingredientAllergies = ingredientAllergies;
     }
@@ -46,6 +50,7 @@ public class Ingredient : DisplayEnumeration
         decimal proteins, 
         decimal fats, 
         decimal carbohydrates,
+        int categoryId,
         [CallerMemberName] string callerName = null) 
         : base(id, title, description, image, callerName)
     {
@@ -53,6 +58,7 @@ public class Ingredient : DisplayEnumeration
         Proteins = proteins;
         Fats = fats;
         Carbohydrates = carbohydrates;
+        CategoryId = categoryId;
         _dishIngredients = [];
         _ingredientAllergies = [];
     }
@@ -65,10 +71,11 @@ public class Ingredient : DisplayEnumeration
         decimal calories,
         decimal proteins,
         decimal fats,
-        decimal carbohydrates)
+        decimal carbohydrates,
+        int categoryId)
     {
         var ingredient = new Ingredient(id, title, description,
-            image, calories, proteins, fats, carbohydrates);
+            image, calories, proteins, fats, carbohydrates, categoryId);
         
         return ingredient;
     }
@@ -96,6 +103,12 @@ public class Ingredient : DisplayEnumeration
     /// Углеводы на 100 г.
     /// </summary>
     public decimal Carbohydrates { get; private set; }
+
+    /// <summary>
+    /// Категория
+    /// </summary>
+    public int CategoryId { get; private set; }
+    public IngredientCategory Category { get; private set; }
 
     /// <summary>
     /// Связи блюда и ингредиентов
