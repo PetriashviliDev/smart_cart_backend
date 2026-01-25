@@ -2,7 +2,7 @@ using System.Security.Claims;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SmartCardBackend.Application.Result;
+using SmartCardBackend.Application.ResultResponseHelper;
 using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Application.Services.Identity;
 using SmartCardBackend.Application.Services.Token.Access;

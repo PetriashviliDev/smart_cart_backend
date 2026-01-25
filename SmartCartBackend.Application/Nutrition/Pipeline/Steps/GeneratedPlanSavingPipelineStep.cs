@@ -26,5 +26,7 @@ public class GeneratedPlanSavingPipelineStep(
         
         uow.NutritionPlanDraftRepository.Add(draft);
         await uow.SaveChangesAsync(ct);
+
+        context.PlanDraftId = draft.Id;
     }
 }

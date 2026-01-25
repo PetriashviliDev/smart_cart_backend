@@ -51,4 +51,7 @@ public abstract class Repository<TEntity, TIdentifier>(
 
     public void Add(TEntity entity) => 
         Context.Set<TEntity>().Add(entity);
+
+    public void AddRange(IEnumerable<TEntity> entities) =>
+        Context.Set<TEntity>().AddRange(entities);
 }

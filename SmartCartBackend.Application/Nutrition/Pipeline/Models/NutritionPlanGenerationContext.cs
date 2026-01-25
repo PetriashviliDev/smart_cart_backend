@@ -1,4 +1,5 @@
 using Pgvector;
+using SmartCardBackend.Application.Nutrition.Dto;
 using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Application.Services.Identity;
 using SmartCardBackend.Domain.Entities;
@@ -44,4 +45,9 @@ public record NutritionPlanGenerationContext
     /// Сгенерированный план
     /// </summary>
     public NutritionPlanDto GeneratedPlan { get; set; }
+
+    /// <summary>
+    /// Идентификатор черновика
+    /// </summary>
+    public Guid PlanDraftId { get; set; }
 }

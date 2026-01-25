@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace SmartCardBackend.Application.Result;
+namespace SmartCardBackend.Application.ResultResponseHelper;
 
 public class Result
 {

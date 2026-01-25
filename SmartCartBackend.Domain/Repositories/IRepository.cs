@@ -17,4 +17,6 @@ public interface IRepository<TEntity, TIdentifier>
         CancellationToken ct = default);
     
     void Add(TEntity entity);
+    
+    void AddRange(IEnumerable<TEntity> entities);
 }

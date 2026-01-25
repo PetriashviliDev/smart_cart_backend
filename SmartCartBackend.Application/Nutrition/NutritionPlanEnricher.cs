@@ -1,3 +1,5 @@
+using SmartCardBackend.Application.Nutrition.Dto;
+using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities;
 using SmartCardBackend.Domain.Entities.SeedWork;
@@ -60,8 +62,26 @@ public class NutritionPlanEnricher(
                         Image = storedDish.Image,
                         CookingTimeInMinutes = storedDish.CookingTime,
                         Calories = storedDish.TotalCalories,
+                        Ingredients = [],
                         Alternatives = []
                     };
+
+                    foreach (var ingredient in dish.Ingredients)
+                    {
+                        var enrichmentIngredient = ingredient with { 
+                            Category = new Pair<int>
+                        {
+                            Id = ingredient.Category.Id, 
+                            Title = ingredient.Category.Title
+                        }, 
+                            Unit = new Pair<int>
+                        {
+                            Id = ingredient.Unit.Id, 
+                            Title = ingredient.Unit.Title
+                        } };
+                        
+                        enrichmentDish.Ingredients.Add(enrichmentIngredient);
+                    }
 
                     foreach (var alternative in dish.Alternatives)
                     {
@@ -75,6 +95,23 @@ public class NutritionPlanEnricher(
                             CookingTimeInMinutes = storedAlternative.CookingTime,
                             Calories = storedAlternative.TotalCalories
                         };
+                        
+                        foreach (var ingredient in alternative.Ingredients)
+                        {
+                            var enrichmentIngredient = ingredient with { 
+                                Category = new Pair<int>
+                                {
+                                    Id = ingredient.Category.Id, 
+                                    Title = ingredient.Category.Title
+                                }, 
+                                Unit = new Pair<int>
+                                {
+                                    Id = ingredient.Unit.Id, 
+                                    Title = ingredient.Unit.Title
+                                } };
+                        
+                            enrichmentAlternative.Ingredients.Add(enrichmentIngredient);
+                        }
                         
                         enrichmentDish.Alternatives.Add(enrichmentAlternative);
                     }

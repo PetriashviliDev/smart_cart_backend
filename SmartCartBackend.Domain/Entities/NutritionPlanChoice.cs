@@ -18,13 +18,17 @@ public class NutritionPlanChoice : Entity<Guid>
         Guid planId,
         NutritionPlan plan,
         int dayNumber,
+        int mealTypeId,
+        MealType mealType,
         int dishId,
         Dish dish,
-        bool choice) : base(id)
+        DishChoice choice) : base(id)
     {
         PlanId = planId;
         Plan = plan;
         DayNumber = dayNumber;
+        MealTypeId = mealTypeId;
+        MealType = mealType;
         DishId = dishId;
         Dish = dish;
         Choice = choice;
@@ -34,12 +38,14 @@ public class NutritionPlanChoice : Entity<Guid>
         Guid id, 
         Guid planId,
         int dayNumber,
+        int mealTypeId,
         int dishId,
-        bool choice) 
+        DishChoice choice) 
         : base(id)
     {
         PlanId = planId;
         DayNumber = dayNumber;
+        MealTypeId = mealTypeId;
         DishId = dishId;
         Choice = choice;
     }
@@ -48,11 +54,12 @@ public class NutritionPlanChoice : Entity<Guid>
         Guid id, 
         Guid planId,
         int dayNumber,
+        int mealTypeId,
         int dishId,
-        bool choice)
+        DishChoice choice)
     {
         var dishChoice = new NutritionPlanChoice(
-            id, planId, dayNumber, dishId, choice);
+            id, planId, dayNumber, mealTypeId, dishId, choice);
         
         return dishChoice;
     }
@@ -87,7 +94,7 @@ public class NutritionPlanChoice : Entity<Guid>
     /// <summary>
     /// Признак выбора
     /// </summary>
-    public bool Choice { get; private set; }
+    public DishChoice Choice { get; private set; }
     
     #endregion Properties
 }

@@ -1,3 +1,5 @@
+using SmartCardBackend.Application.Nutrition.Dto;
+
 namespace SmartCardBackend.Application.Nutrition;
 
 public interface INutritionPlanEnricher

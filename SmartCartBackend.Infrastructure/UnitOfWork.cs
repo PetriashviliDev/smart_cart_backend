@@ -12,7 +12,9 @@ public class UnitOfWork(
     ISessionRepository sessionRepository, 
     IUserAiRequestRepository userAiRequestRepository, 
     IDishRepository dishRepository,
-    INutritionPlanDraftRepository nutritionPlanDraftRepository) 
+    INutritionPlanDraftRepository nutritionPlanDraftRepository,
+    INutritionPlanRepository nutritionPlanRepository,
+    INutritionPlanChoiceRepository nutritionPlanChoiceRepository) 
     : IUnitOfWork
 {
     private IDbContextTransaction _transaction;
@@ -32,6 +34,10 @@ public class UnitOfWork(
     public IDishRepository DishRepository { get; } = dishRepository;
     
     public INutritionPlanDraftRepository NutritionPlanDraftRepository { get; } = nutritionPlanDraftRepository;
+    
+    public INutritionPlanRepository NutritionPlanRepository { get; } = nutritionPlanRepository;
+    
+    public INutritionPlanChoiceRepository NutritionPlanChoiceRepository { get; } = nutritionPlanChoiceRepository;
 
     public async Task<bool> SaveChangesAsync(CancellationToken ct = default)
     {

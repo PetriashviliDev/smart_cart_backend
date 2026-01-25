@@ -18,6 +18,10 @@ public interface IUnitOfWork
     
     INutritionPlanDraftRepository NutritionPlanDraftRepository { get; }
     
+    INutritionPlanRepository NutritionPlanRepository { get; }
+    
+    INutritionPlanChoiceRepository NutritionPlanChoiceRepository { get; }
+    
     Task<bool> SaveChangesAsync(
         CancellationToken ct = default);
     

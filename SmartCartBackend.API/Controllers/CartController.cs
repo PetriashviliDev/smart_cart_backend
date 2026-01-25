@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartCartBackend.API.Requests;
 
 namespace SmartCartBackend.API.Controllers;
 
@@ -10,10 +9,8 @@ namespace SmartCartBackend.API.Controllers;
 [Authorize]
 public class CartController : ControllerBase
 {
-    [HttpPost("{cartId:guid}/invite")]
-    public Task<IResult> InviteAsync(
-        [FromRoute] Guid cartId, 
-        [FromBody] InviteUserRequest request)
+    [HttpPost("save")]
+    public Task<IResult> SaveCartAsync()
     {
         return Task.FromResult(Results.Ok());
     }

@@ -1,7 +1,10 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartCardBackend.Application.Mediatr.Command.Nutrition.AcceptPlan;
 using SmartCardBackend.Application.Nutrition;
+using SmartCardBackend.Application.Nutrition.Dto;
 using SmartCardBackend.Application.Nutrition.Pipeline;
 using SmartCardBackend.Application.Nutrition.Pipeline.Models;
 using SmartCardBackend.Application.Services.Identity;
@@ -13,15 +16,22 @@ namespace SmartCartBackend.API.Controllers;
 [Authorize]
 public class NutritionController(
     IIdentityService identityService,
+    ISender sender,
     INutritionPlanGenerationPipeline pipeline) 
     : ControllerBase
 {
+    /// <summary>
+    /// Генерация плана
+    /// </summary>
+    /// <param name="requirements">Требования пользователя</param>
+    /// <returns>Сгенерированный план</returns>
     [HttpPost("generate-plan")]
     [ProducesResponseType(typeof(NutritionPlanDto), StatusCodes.Status200OK)]
     public async Task<IResult> GeneratePlanAsync(
         [FromBody] NutritionRequirements requirements)
     {
-        var user = await identityService.GetUserContextAsync(HttpContext.RequestAborted);
+        var user = await identityService.GetUserContextAsync(
+            HttpContext.RequestAborted);
 
         var request = new NutritionPlanGenerationRequest
         {
@@ -29,37 +39,27 @@ public class NutritionController(
             Requirements = requirements
         };
         
-        var plan = await pipeline.GenerateAsync(request, HttpContext.RequestAborted);
+        var plan = await pipeline.GenerateAsync(
+            request, HttpContext.RequestAborted);
         
         return Results.Ok(plan);
     }
     
-    // TODO: создать command
+    /// <summary>
+    /// Сохранение подтвержденного плана
+    /// </summary>
+    /// <param name="acceptedPlan">Подтвержденный план</param>
     [HttpPost("accept-plan")]
-    [ProducesResponseType(typeof(NutritionPlanDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IResult> AcceptPlanAsync(
-        [FromBody] NutritionRequirements requirements)
+        [FromBody] AcceptedNutritionPlanDto acceptedPlan)
     {
-        var user = await identityService.GetUserContextAsync(HttpContext.RequestAborted);
+        var user = await identityService.GetUserContextAsync(
+            HttpContext.RequestAborted);
 
-        var request = new NutritionPlanGenerationRequest
-        {
-            User = user,
-            Requirements = requirements
-        };
+        var command = new AcceptPlanCommand(user, acceptedPlan);
+        await sender.Send(command, HttpContext.RequestAborted);
         
-        var plan = await pipeline.GenerateAsync(request, HttpContext.RequestAborted);
-        
-        return Results.Ok(plan);
-    }
-    
-    // TODO: создать query
-    [HttpPost("{dishId:int}/ingredients")]
-    [ProducesResponseType(typeof(NutritionPlanDto), StatusCodes.Status200OK)]
-    public async Task<IResult> GetIngredientsAsync([FromRoute] int dishId)
-    {
-        
-        
-        return Results.Ok();
+        return Results.Created();
     }
 }

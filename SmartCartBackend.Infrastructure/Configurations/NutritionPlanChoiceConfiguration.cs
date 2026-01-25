@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartCardBackend.Domain.Entities;
-using SmartCartBackend.Infrastructure.Extensions;
+using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCartBackend.Infrastructure.Configurations;
 
@@ -23,6 +24,10 @@ public class NutritionPlanChoiceConfiguration : IEntityTypeConfiguration<Nutriti
             .IsRequired();
         
         builder.Property(x => x.DishId)
+            .IsRequired();
+        
+        builder.Property(x => x.Choice)
+            .HasConversion(new EnumToStringConverter<DishChoice>())
             .IsRequired();
         
         builder.HasOne(x => x.Plan)

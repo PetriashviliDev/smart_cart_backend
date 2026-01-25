@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using SmartCardBackend.Application.AI.Clients;
+using SmartCardBackend.Application.Nutrition.Dto;
 using SmartCardBackend.Application.Nutrition.Pipeline.Models;
 
 namespace SmartCardBackend.Application.Nutrition.Pipeline.Steps;

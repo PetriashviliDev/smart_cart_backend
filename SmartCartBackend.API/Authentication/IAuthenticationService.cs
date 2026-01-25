@@ -1,4 +1,4 @@
-using SmartCardBackend.Application.Result;
+using SmartCardBackend.Application.ResultResponseHelper;
 using SmartCartBackend.API.Requests;
 
 namespace SmartCartBackend.API.Authentication;
