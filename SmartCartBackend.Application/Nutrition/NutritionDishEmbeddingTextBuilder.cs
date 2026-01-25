@@ -12,7 +12,7 @@ public class NutritionDishEmbeddingTextBuilder : IEmbeddingTextBuilder<Dish>
         sb.AppendLine($"Описание: {dish.Description}");
         sb.AppendLine($"Ингредиенты: {string.Join(", ", dish.Ingredients.Select(i => i.Title))}");
         sb.AppendLine($"Тип приема пищи: {dish.MealType.Title}");
-        sb.AppendLine($"Теги: {string.Join(", ", dish.Tags.Select(i => i.Title))}");
+        sb.AppendLine($"Теги: {string.Join(", ", dish.Tags.Select(t => t.Title))}");
         
         return sb.ToString();
     }

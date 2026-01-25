@@ -25,19 +25,5 @@ public class UserPreferenceConfiguration : IEntityTypeConfiguration<UserPreferen
             .WithMany()
             .HasForeignKey(x => x.DishId)
             .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.Property(x => x.MealTypeId)
-            .IsRequired();
-        
-        builder.HasOne(x => x.MealType)
-            .WithMany()
-            .HasForeignKey(x => x.MealTypeId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Navigation(x => x.Dish)
-            .AutoInclude();
-        
-        builder.Navigation(x => x.MealType)
-            .AutoInclude();
     }
 }

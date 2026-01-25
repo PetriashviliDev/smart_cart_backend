@@ -14,36 +14,29 @@ public class UserPreference : Entity<Guid>
         Guid id, 
         Guid userId,
         int dishId, 
-        Dish dish, 
-        int mealTypeId, 
-        MealType mealType) : base(id)
+        Dish dish) : base(id)
     {
         UserId = userId;
         DishId = dishId;
         Dish = dish;
-        MealTypeId = mealTypeId;
-        MealType = mealType;
     }
 
     private UserPreference(
         Guid id,
         Guid userId,
-        int dishId,
-        int mealTypeId) : base(id)
+        int dishId) : base(id)
     {
         UserId = userId;
         DishId = dishId;
-        MealTypeId = mealTypeId;
     }
 
     public static UserPreference Create(
         Guid id,
         Guid userId,
-        int dishId, 
-        int mealTypeId)
+        int dishId)
     {
         var userPreference = new UserPreference(
-            id, userId, dishId, mealTypeId);
+            id, userId, dishId);
 
         return userPreference;
     }
@@ -59,10 +52,6 @@ public class UserPreference : Entity<Guid>
     public int DishId { get; private set; }
 
     public Dish Dish { get; }
-
-    public int MealTypeId { get; private set; }
-
-    public MealType MealType { get; }
     
     #endregion Properties
 }

@@ -11,8 +11,5 @@ public class TagConfiguration : EnumerationEntityTypeConfiguration<Tag>
         builder.ToTable("Tags");
         
         base.Configure(builder);
-
-        builder.Navigation(x => x.DishTags)
-            .AutoInclude();
     }
 }

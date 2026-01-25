@@ -1,6 +1,7 @@
 using Pgvector;
 using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Application.Services.Identity;
+using SmartCardBackend.Domain.Entities;
 
 namespace SmartCardBackend.Application.Nutrition.Pipeline.Models;
 
@@ -32,15 +33,15 @@ public record NutritionPlanGenerationContext
     /// <summary>
     /// Отфильтрованные блюда
     /// </summary>
-    public List<Pair<int>> FilteredDishes { get; set; }
+    public List<Dish> FilteredDishes { get; set; }
     
     /// <summary>
     /// Похожие блюда
     /// </summary>
-    public List<Pair<int>> SimilarDishes { get; set; }
+    public List<Dish> SimilarDishes { get; set; }
 
     /// <summary>
     /// Сгенерированный план
     /// </summary>
-    public NutritionPlan GeneratedPlan { get; set; }
+    public NutritionPlanDto GeneratedPlan { get; set; }
 }

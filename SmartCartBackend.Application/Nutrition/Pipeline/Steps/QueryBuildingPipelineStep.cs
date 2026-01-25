@@ -1,35 +1,86 @@
+using System.Text;
 using SmartCardBackend.Application.Nutrition.Pipeline.Models;
+using SmartCardBackend.Application.Services.Embedding;
+using SmartCardBackend.Domain;
+using SmartCardBackend.Domain.Entities;
 
 namespace SmartCardBackend.Application.Nutrition.Pipeline.Steps;
 
-public class QueryBuildingPipelineStep : INutritionPlanGenerationPipelineStep
+public class QueryBuildingPipelineStep(
+    IEmbeddingTextBuilder<Dish> textBuilder,
+    IUnitOfWork uow) 
+    : INutritionPlanGenerationPipelineStep
 {
-    public Task HandleAsync(
+    public async Task HandleAsync(
         NutritionPlanGenerationContext context, 
         CancellationToken ct = default)
     {
-        var breakfastPreferences = string.Join(", ", 
-            context.User.BreakfastPreferences.Select(p => p.Title));
+        var breakfastDishIds = context.User.PreferenceDishes
+            .Where(d => d.MealTypeId == MealType.Breakfast.Id)
+            .Select(p => p.Id)
+            .ToList();
         
-        var lunchPreferences = string.Join(", ", 
-            context.User.LunchPreferences.Select(p => p.Title));
+        var lunchDishIds = context.User.PreferenceDishes
+            .Where(d => d.MealTypeId == MealType.Lunch.Id)
+            .Select(p => p.Id)
+            .ToList();
         
-        var snackPreferences = string.Join(", ", 
-            context.User.SnackPreferences.Select(p => p.Title));
+        var snackDishIds = context.User.PreferenceDishes
+            .Where(d => d.MealTypeId == MealType.Snack.Id)
+            .Select(p => p.Id)
+            .ToList();
         
-        var dinnerPreferences = string.Join(", ", 
-            context.User.DinnerPreferences.Select(p => p.Title));
+        var dinnerDishIds = context.User.PreferenceDishes
+            .Where(d => d.MealTypeId == MealType.Dinner.Id)
+            .Select(p => p.Id)
+            .ToList();
         
-        context.RawQuery = $$"""
-                             - Цель: {{context.Requirements.Strategy.Title}}
-                             - Приемов пищи в день: {{context.Requirements.MealsCountPerDay}}
-                             - Время приготовления блюда: ≤ {{context.Requirements.CookingTimeInMinutes}} мин
-                             - Предпочтения на завтрак: {{breakfastPreferences}} 
-                             - Предпочтения на обед: {{lunchPreferences}} 
-                             - Предпочтения на перекус: {{snackPreferences}} 
-                             - Предпочтения на ужин: {{dinnerPreferences}} 
-                             """;
+        var preferenceDishIds = breakfastDishIds
+            .Concat(lunchDishIds)
+            .Concat(snackDishIds)
+            .Concat(dinnerDishIds)
+            .Distinct()
+            .ToList();
+
+        var preferenceDishes = await uow.DishRepository.FindManyAsync(
+            dish => preferenceDishIds.Contains(dish.Id),
+            trackingEnabled: false,
+            ct: ct);
         
-        return Task.CompletedTask;
+        var breakfastDishes = preferenceDishes
+            .Where(p => breakfastDishIds.Contains(p.Id))
+            .ToList();
+        
+        var lunchDishes = preferenceDishes
+            .Where(p => lunchDishIds.Contains(p.Id))
+            .ToList();
+        
+        var snackDishes = preferenceDishes
+            .Where(p => snackDishIds.Contains(p.Id))
+            .ToList();
+        
+        var dinnerDishes = preferenceDishes
+            .Where(p => dinnerDishIds.Contains(p.Id))
+            .ToList();
+
+        var rawQueryBuilder = new StringBuilder($"Цель: {context.Requirements.Strategy.Title}{Environment.NewLine}");
+        rawQueryBuilder.AppendLine($"{Environment.NewLine}Предпочтения на завтрак:");
+
+        foreach (var dish in breakfastDishes)
+            rawQueryBuilder.AppendLine(textBuilder.BuildFor(dish));
+        
+        rawQueryBuilder.AppendLine("Предпочтения на обед:");
+        foreach (var dish in lunchDishes)
+            rawQueryBuilder.AppendLine(textBuilder.BuildFor(dish));
+        
+        rawQueryBuilder.AppendLine("Предпочтения на перекус:");
+        foreach (var dish in snackDishes)
+            rawQueryBuilder.AppendLine(textBuilder.BuildFor(dish));
+        
+        rawQueryBuilder.AppendLine("Предпочтения на ужин:");
+        foreach (var dish in dinnerDishes)
+            rawQueryBuilder.AppendLine(textBuilder.BuildFor(dish));
+        
+        context.RawQuery = rawQueryBuilder.ToString();
     }
 }

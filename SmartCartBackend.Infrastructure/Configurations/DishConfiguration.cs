@@ -28,6 +28,12 @@ public class DishConfiguration : EnumerationEntityTypeConfiguration<Dish>
         
         builder.Property(x => x.CookingTime)
             .IsRequired();
+
+        builder.Property(x => x.DifficultyId)
+            .IsRequired();
+
+        builder.Property(x => x.MealTypeId)
+            .IsRequired();
         
         builder.HasOne(x => x.Difficulty)
             .WithMany()
@@ -47,20 +53,5 @@ public class DishConfiguration : EnumerationEntityTypeConfiguration<Dish>
             .WithMany()
             .HasForeignKey(x => x.MealTypeId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Navigation(x => x.Difficulty)
-            .AutoInclude();
-        
-        builder.Navigation(x => x.DishIngredients)
-            .AutoInclude();
-        
-        builder.Navigation(x => x.DishEmbedding)
-            .AutoInclude();
-        
-        builder.Navigation(x => x.MealType)
-            .AutoInclude();
-        
-        builder.Navigation(x => x.DishTags)
-            .AutoInclude();
     }
 }

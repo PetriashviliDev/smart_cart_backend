@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
@@ -7,22 +6,20 @@ namespace SmartCardBackend.Domain.Entities;
 /// <summary>
 /// Доменная модель связи блюда с тегом
 /// </summary>
-public class DishTag : ActualizedEnumeration<DishTag>
+public class DishTag : Entity<int>
 {
     #region Constructors
     
-    private DishTag() { }
+    private DishTag(int id) : base(id) { }
 
     [JsonConstructor]
     protected DishTag(
         int id,
-        string title,
         int dishId,
         Dish dish,
         int tagId,
-        Tag tag,
-        [CallerMemberName] string callerName = null)
-        : base(id, title, callerName)
+        Tag tag)
+        : base(id)
     {
         DishId = dishId;
         Dish = dish;
@@ -32,11 +29,9 @@ public class DishTag : ActualizedEnumeration<DishTag>
     
     private DishTag(
         int id,
-        string title,
         int dishId,
-        int tagId,
-        [CallerMemberName] string callerName = null)
-        : base(id, title, callerName)
+        int tagId)
+        : base(id)
     {
         DishId = dishId;
         TagId = tagId;
@@ -44,13 +39,10 @@ public class DishTag : ActualizedEnumeration<DishTag>
 
     public static DishTag Create(
         int id,
-        string title,
         int dishId,
         int tagId)
     {
-        var dishTag = new DishTag(
-            id, title, dishId, tagId);
-        
+        var dishTag = new DishTag(id, dishId, tagId);
         return dishTag;
     }
     

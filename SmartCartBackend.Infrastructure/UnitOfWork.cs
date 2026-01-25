@@ -11,7 +11,8 @@ public class UnitOfWork(
     IPhoneVerificationRepository phoneVerificationRepository,
     ISessionRepository sessionRepository, 
     IUserAiRequestRepository userAiRequestRepository, 
-    IDishRepository dishRepository) 
+    IDishRepository dishRepository,
+    INutritionPlanDraftRepository nutritionPlanDraftRepository) 
     : IUnitOfWork
 {
     private IDbContextTransaction _transaction;
@@ -29,6 +30,8 @@ public class UnitOfWork(
     public IUserAiRequestRepository UserAiRequestRepository { get; } = userAiRequestRepository;
     
     public IDishRepository DishRepository { get; } = dishRepository;
+    
+    public INutritionPlanDraftRepository NutritionPlanDraftRepository { get; } = nutritionPlanDraftRepository;
 
     public async Task<bool> SaveChangesAsync(CancellationToken ct = default)
     {

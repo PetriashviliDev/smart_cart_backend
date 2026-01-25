@@ -70,22 +70,7 @@ public record UserContext
     public string UserAgent { get; set; }
     
     /// <summary>
-    /// Предпочтения на завтрак
+    /// Предпочтения
     /// </summary>
-    public List<Pair<int>> BreakfastPreferences { get; set; } = [];
-    
-    /// <summary>
-    /// Предпочтения на обед
-    /// </summary>
-    public List<Pair<int>> LunchPreferences { get; set; } = [];
-    
-    /// <summary>
-    /// Предпочтения на перекус
-    /// </summary>
-    public List<Pair<int>> SnackPreferences { get; set; } = [];
-    
-    /// <summary>
-    /// Предпочтения на ужин
-    /// </summary>
-    public List<Pair<int>> DinnerPreferences { get; set; } = [];
+    public List<PreferenceDishDto> PreferenceDishes { get; set; } = [];
 }

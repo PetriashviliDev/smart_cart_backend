@@ -35,7 +35,8 @@ public static class Setup
             .AddScoped<IPhoneVerificationRepository, PhoneVerificationRepository>()
             .AddScoped<ISessionRepository, SessionRepository>()
             .AddScoped<IUserAiRequestRepository, UserAiRequestRepository>()
-            .AddScoped<IEnumerationRepository, EnumerationRepository>();
+            .AddScoped<IEnumerationRepository, EnumerationRepository>()
+            .AddScoped<INutritionPlanDraftRepository, NutritionPlanDraftRepository>();
         
         return services;
     }

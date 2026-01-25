@@ -8,5 +8,5 @@ public record NutritionPlanGenerationResult
     /// <summary>
     /// Сгенерированный план питания
     /// </summary>
-    public NutritionPlan Plan { get; set; }
+    public NutritionPlanDto Plan { get; set; }
 }

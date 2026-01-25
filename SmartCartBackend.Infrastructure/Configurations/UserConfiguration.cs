@@ -77,11 +77,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         
         builder.HasIndex(x => x.Email)
             .IsUnique();
-        
-        builder.Navigation(x => x.Preferences)
-            .AutoInclude();
-        
-        builder.Navigation(x => x.Allergies)
-            .AutoInclude();
     }
 }

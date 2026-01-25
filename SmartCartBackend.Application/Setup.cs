@@ -9,6 +9,7 @@ using SmartCardBackend.Application.Hangfire;
 using SmartCardBackend.Application.HostedServices;
 using SmartCardBackend.Application.Mapping;
 using SmartCardBackend.Application.Nutrition;
+using SmartCardBackend.Application.Options;
 using SmartCardBackend.Application.Services.Actualizers;
 using SmartCardBackend.Application.Services.Embedding;
 using SmartCardBackend.Application.Services.Generators;
@@ -52,6 +53,9 @@ public static class Setup
             .AddScoped<IIdentityService, IdentityService>()
             .AddScoped<IEnumerationActualizer, EnumerationActualizer>()
             .AddScoped<IDishSearcher, DishSearcher>();
+
+        services.AddOptions<VectorSearchOptions>()
+            .BindConfiguration(nameof(VectorSearchOptions));
 
         services.AddSingleton(_ => new JsonSerializerSettings
         {

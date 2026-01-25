@@ -8,8 +8,8 @@ public class NutritionPlanEnricher(
     IUnitOfWork uow) 
     : INutritionPlanEnricher
 {
-    public async Task<NutritionPlan> EnrichAsync(
-        NutritionPlan plan, 
+    public async Task<NutritionPlanDto> EnrichAsync(
+        NutritionPlanDto plan, 
         CancellationToken ct = default)
     {
         var mealTypes = Enumeration
@@ -28,11 +28,11 @@ public class NutritionPlanEnricher(
             ct: ct))
             .ToDictionary(d => d.Id);
 
-        var enrichmentPlan = new NutritionPlan();
+        var enrichmentPlan = new NutritionPlanDto();
 
         foreach (var day in plan.Days)
         {
-            var enrichmentDay = new NutritionPlanDay
+            var enrichmentDay = new NutritionPlanDayDto
             {
                 Number = day.Number, 
                 Meals = []
@@ -40,7 +40,7 @@ public class NutritionPlanEnricher(
 
             foreach (var meal in day.Meals)
             {
-                var enrichmentMeal = new NutritionMeal
+                var enrichmentMeal = new NutritionMealDto
                 {
                     Type = meal.Type with
                     {
@@ -53,7 +53,7 @@ public class NutritionPlanEnricher(
                 {
                     var storedDish = dishes[dish.Id];
 
-                    var enrichmentDish = new NutritionPlanDish
+                    var enrichmentDish = new NutritionPlanDishDto
                     {
                         Id = dish.Id,
                         Title = storedDish.Title,
@@ -67,7 +67,7 @@ public class NutritionPlanEnricher(
                     {
                         var storedAlternative = dishes[alternative.Id];
 
-                        var enrichmentAlternative = new NutritionPlanAlternativeDish
+                        var enrichmentAlternative = new NutritionPlanAlternativeDishDto
                         {
                             Id = alternative.Id,
                             Title = storedAlternative.Title,

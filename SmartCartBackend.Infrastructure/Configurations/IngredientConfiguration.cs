@@ -32,8 +32,5 @@ public class IngredientConfiguration : EnumerationEntityTypeConfiguration<Ingred
             .WithOne(x => x.Ingredient)
             .HasForeignKey(x => x.IngredientId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Navigation(x => x.IngredientAllergies)
-            .AutoInclude();
     }
 }

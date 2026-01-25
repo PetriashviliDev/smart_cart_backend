@@ -1,6 +1,6 @@
 using Pgvector;
-using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Domain;
+using SmartCardBackend.Domain.Entities;
 
 namespace SmartCardBackend.Application.Services.Searchers;
 
@@ -8,16 +8,14 @@ public class DishSearcher(
     IUnitOfWork uow) 
     : IDishSearcher
 {
-    public async Task<List<Pair<int>>> SearchSimilarAsync(
+    public async Task<List<Dish>> SearchSimilarAsync(
         Vector queryEmbedding, 
-        int take = 100, 
-        double similarityThreshold = 0.7,
+        int batch, 
+        double similarityThreshold,
         CancellationToken ct = default)
     {
-        var chunkSimilarDishes = (await uow.DishRepository
-            .SearchSimilarAsync(queryEmbedding, take, similarityThreshold, ct))
-            .Select(i => new Pair<int> { Id = i.Id, Title = i.Title })
-            .ToList();
+        var chunkSimilarDishes = await uow.DishRepository
+            .SearchSimilarAsync(queryEmbedding, batch, similarityThreshold, ct);
 
         return chunkSimilarDishes;
     }

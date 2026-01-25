@@ -25,8 +25,5 @@ public class UserAllergyConfiguration : IEntityTypeConfiguration<UserAllergy>
             .WithMany()
             .HasForeignKey(x => x.AllergyId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Navigation(x => x.Allergy)
-            .AutoInclude();
     }
 }

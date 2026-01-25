@@ -3,6 +3,7 @@ using SmartCardBackend.Application.Extensions;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities.SeedWork;
 using SmartCardBackend.Domain.Repositories;
+using SmartCartBackend.Common.Extensions;
 
 namespace SmartCardBackend.Application.Services.Actualizers;
 
@@ -14,11 +15,12 @@ public class EnumerationActualizer(
     public async Task ActualizeAsync(CancellationToken ct = default)
     {
         var actualizeType = typeof(IActualizable<>);
-        
+
         var enumerationTypes = typeof(DomainAssemblyReference)
             .Assembly
-            .GetExportedTypes()
-            .Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableFrom(actualizeType))
+            .GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Any(i => 
+                    i.IsGenericType && i.GetGenericTypeDefinition() == actualizeType))
             .ToList();
         
         Enumeration.Flush();

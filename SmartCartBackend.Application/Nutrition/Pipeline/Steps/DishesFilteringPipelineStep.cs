@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using SmartCardBackend.Application.Nutrition.Pipeline.Models;
-using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities;
 
@@ -18,14 +17,16 @@ public class DishesFilteringPipelineStep(
         CancellationToken ct = default)
     {
         // Фильтр по аллергиям и времени на приготовление
-        Expression<Func<Dish, bool>> expr = dish => !dish.Ingredients.Any(i => 
-            i.Allergies.Any(a => context.User.Allergies.Select(ua => ua.Id).Contains(a.Id) 
-                                 && dish.CookingTime <= context.Requirements.CookingTimeInMinutes));
+        var userAllergyIds = context.User.Allergies.Select(ua => ua.Id).ToList();
+        var cookingTimeLimit = context.Requirements.CookingTimeInMinutes;
 
-        var dishes = await uow.DishRepository
+        Expression<Func<Dish, bool>> expr = dish => 
+            (cookingTimeLimit == null || dish.CookingTime <= cookingTimeLimit) 
+            && !dish.DishIngredients.Any(di => 
+                di.Ingredient.IngredientAllergies.Any(ia => 
+                    userAllergyIds.Contains(ia.AllergyId)));
+
+        context.FilteredDishes = await uow.DishRepository
             .FindManyAsync(expr, trackingEnabled: false, ct: ct);
-        
-        context.FilteredDishes = dishes.Select(d => 
-            new Pair<int>{ Id = d.Id, Title = d.Title}).ToList();
     }
 }

@@ -2,7 +2,7 @@ using SmartCardBackend.Application.Responses;
 
 namespace SmartCardBackend.Application.Nutrition;
 
-public record NutritionMeal
+public record NutritionMealDto
 {
     /// <summary>
     /// Тип приема пищи
@@ -12,5 +12,5 @@ public record NutritionMeal
     /// <summary>
     /// Основные блюда
     /// </summary>
-    public List<NutritionPlanDish> Dishes { get; set; }
+    public List<NutritionPlanDishDto> Dishes { get; set; }
 }

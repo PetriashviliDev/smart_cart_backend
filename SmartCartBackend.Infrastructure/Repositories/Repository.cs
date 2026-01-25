@@ -10,9 +10,11 @@ public abstract class Repository<TEntity, TIdentifier>(
     : IRepository<TEntity, TIdentifier> 
     where TEntity : class, IHasId<TIdentifier>
 {
-    protected DatabaseContext Context => contextFactory.GetOrCreateDbContext();
+    protected DatabaseContext Context => 
+        contextFactory.GetOrCreateDbContext();
     
-    protected virtual DbSet<TEntity> Set => Context.Set<TEntity>();
+    protected virtual IQueryable<TEntity> Set => 
+        Context.Set<TEntity>();
     
     public async Task<List<TEntity>> FindManyAsync(
         Expression<Func<TEntity, bool>> expression, 
@@ -41,9 +43,12 @@ public abstract class Repository<TEntity, TIdentifier>(
         if (!trackingEnabled)
             query = query.AsNoTracking();
         
-        var entity = await query.SingleOrDefaultAsync(expression, ct);
+        var entity = await query
+            .SingleOrDefaultAsync(expression, ct);
+        
         return entity;
     }
 
-    public void Add(TEntity entity) => Set.Add(entity);
+    public void Add(TEntity entity) => 
+        Context.Set<TEntity>().Add(entity);
 }

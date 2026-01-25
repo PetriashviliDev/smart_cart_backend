@@ -2,7 +2,6 @@ using System.Security.Claims;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SmartCardBackend.Application.Constants;
 using SmartCardBackend.Application.Result;
 using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Application.Services.Identity;
@@ -25,20 +24,17 @@ public class AuthenticationService(
     IRefreshTokenManager refreshTokenManager,
     IVerificationTokenManager verificationTokenManager,
     IGuidGenerator guidGenerator, 
-    ISystemClock clock) : IAuthenticationService
+    ISystemClock clock) 
+    : IAuthenticationService
 {
     public async Task<Result<AuthenticationResponse>> RegisterUserAsync(
         RegisterUserRequest request, 
         CancellationToken ct = default)
     {
         var varificationToken = verificationTokenManager.ParseToken(identityService.GetToken());
-        var claims = varificationToken.Claims.ToList();
+        var claims = varificationToken.Claims.ToDto();
 
-        var phone = claims.Single(x => x.Type == ClaimTypes.MobilePhone).Value;
-        var sessionId = Guid.Parse(claims.Single(x => x.Type == ClaimTypesConst.SessionId).Value);
-        var purpose = claims.Single(x => x.Type == ClaimTypesConst.Purpose).Value;
-
-        var session = await unitOfWork.SessionRepository.FindActiveAsync(sessionId, ct: ct);
+        var session = await unitOfWork.SessionRepository.FindActiveAsync(claims.SessionId, ct: ct);
         if (session == null)
             return Result.Failure<AuthenticationResponse>(
                 Error.Unauthorized("Сессия не найдена или уже использована"));
@@ -46,34 +42,48 @@ public class AuthenticationService(
         session.MarkAsUsed(isUsed: true, clock.Now);
         
         var user = await unitOfWork.UserRepository
-            .SingleOrDefaultAsync(u => EF.Functions.ILike(u.Phone, phone), trackingEnabled: false, ct);
+            .SingleOrDefaultAsync(
+                u => EF.Functions.ILike(u.Phone, claims.Phone), 
+                trackingEnabled: false, 
+                ct);
 
         if (user != null)
             return Result.Failure<AuthenticationResponse>(
                 Error.Conflict("Пользователь с таким телефоном уже существует"));
         
         user = await unitOfWork.UserRepository
-            .SingleOrDefaultAsync(u => EF.Functions.ILike(u.Email, request.Email), trackingEnabled: false, ct);
+            .SingleOrDefaultAsync(
+                u => EF.Functions.ILike(u.Email, request.Email), 
+                trackingEnabled: false, 
+                ct);
         
         if (user != null)
             return Result.Failure<AuthenticationResponse>(
                 Error.Conflict("Пользователь с такой почтой уже существует"));
 
         var userId = guidGenerator.NewGuid;
+
+        var userAllergies = request.Allergies
+            .Select(a => UserAllergy.Create(guidGenerator.NewGuid, userId, a.Id))
+            .ToList();
+
+        var preferences = request.PreferenceDishes
+            .Select(p => UserPreference.Create(guidGenerator.NewGuid, userId, p.Id))
+            .ToList();
         
         user = User.Create(
             userId, 
             request.Name, 
             request.Email, 
-            phone, 
+            claims.Phone, 
             request.Gender, 
             request.Age, 
             request.Height, 
             request.Weight,
-            "",
-            [], 
-            [], 
-            1);
+            request.ExcludedProducts,
+            userAllergies,
+            preferences,
+            request.ActivityLevel.Id);
         
         unitOfWork.UserRepository.Add(user);
         
@@ -149,7 +159,7 @@ public class AuthenticationService(
 
         var hash = refreshTokenManager.HashToken(refreshToken.Token);
         user.SetRefreshToken(hash, refreshToken.ExpiresAt);
-
+        
         return new AuthenticationResponse
         {
             AccessToken = accessToken.Token,

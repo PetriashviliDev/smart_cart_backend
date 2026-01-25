@@ -7,7 +7,7 @@ public interface IDishRepository : IRepository<Dish, int>
 {
     Task<List<Dish>> SearchSimilarAsync(
         Vector queryEmbedding,
-        int take = 50,
-        double similarityThreshold = 0.7,
+        int batch,
+        double similarityThreshold,
         CancellationToken ct = default);
 }

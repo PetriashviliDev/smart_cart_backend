@@ -16,6 +16,8 @@ public interface IUnitOfWork
     
     IDishRepository DishRepository { get; }
     
+    INutritionPlanDraftRepository NutritionPlanDraftRepository { get; }
+    
     Task<bool> SaveChangesAsync(
         CancellationToken ct = default);
     

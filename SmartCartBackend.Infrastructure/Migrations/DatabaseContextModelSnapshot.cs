@@ -565,25 +565,16 @@ namespace SmartCartBackend.Infrastructure.Migrations
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.DishTag", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DishId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("InternalName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsAdded")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("TagId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -728,57 +719,6 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.ToTable("IngredientAllergies", (string)null);
                 });
 
-            modelBuilder.Entity("SmartCardBackend.Domain.Entities.Meal", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("DishId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MealPlanId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MealTypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Date");
-
-                    b.HasIndex("DishId");
-
-                    b.HasIndex("MealTypeId");
-
-                    b.HasIndex("MealPlanId", "Date");
-
-                    b.ToTable("Meals", (string)null);
-                });
-
-            modelBuilder.Entity("SmartCardBackend.Domain.Entities.MealPlan", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<DateTimeOffset>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MealPlans", (string)null);
-                });
-
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.MealType", b =>
                 {
                     b.Property<int>("Id")
@@ -844,6 +784,82 @@ namespace SmartCartBackend.Infrastructure.Migrations
                             IsDeleted = false,
                             Title = "Ужин"
                         });
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.NutritionPlan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("DraftId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DraftId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("NutritionPlans", (string)null);
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.NutritionPlanChoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Choice")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("DayNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MealTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishId");
+
+                    b.HasIndex("MealTypeId");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("NutritionPlanChoices", (string)null);
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.NutritionPlanDraft", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PlanJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("NutritionPlanDrafts", (string)null);
                 });
 
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.PhoneVerification", b =>
@@ -1211,17 +1227,12 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Property<int>("DishId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MealTypeId")
-                        .HasColumnType("integer");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DishId");
-
-                    b.HasIndex("MealTypeId");
 
                     b.HasIndex("UserId");
 
@@ -1329,7 +1340,26 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Navigation("Ingredient");
                 });
 
-            modelBuilder.Entity("SmartCardBackend.Domain.Entities.Meal", b =>
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.NutritionPlan", b =>
+                {
+                    b.HasOne("SmartCardBackend.Domain.Entities.NutritionPlanDraft", "Draft")
+                        .WithMany()
+                        .HasForeignKey("DraftId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartCardBackend.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Draft");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.NutritionPlanChoice", b =>
                 {
                     b.HasOne("SmartCardBackend.Domain.Entities.Dish", "Dish")
                         .WithMany()
@@ -1337,23 +1367,34 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SmartCardBackend.Domain.Entities.MealPlan", "MealPlan")
-                        .WithMany("Meals")
-                        .HasForeignKey("MealPlanId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("SmartCardBackend.Domain.Entities.MealType", "MealType")
                         .WithMany()
                         .HasForeignKey("MealTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartCardBackend.Domain.Entities.NutritionPlan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Dish");
 
-                    b.Navigation("MealPlan");
-
                     b.Navigation("MealType");
+
+                    b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("SmartCardBackend.Domain.Entities.NutritionPlanDraft", b =>
+                {
+                    b.HasOne("SmartCardBackend.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.User", b =>
@@ -1405,12 +1446,6 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SmartCardBackend.Domain.Entities.MealType", "MealType")
-                        .WithMany()
-                        .HasForeignKey("MealTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SmartCardBackend.Domain.Entities.User", "User")
                         .WithMany("Preferences")
                         .HasForeignKey("UserId")
@@ -1418,8 +1453,6 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Dish");
-
-                    b.Navigation("MealType");
 
                     b.Navigation("User");
                 });
@@ -1448,11 +1481,6 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Navigation("DishIngredients");
 
                     b.Navigation("IngredientAllergies");
-                });
-
-            modelBuilder.Entity("SmartCardBackend.Domain.Entities.MealPlan", b =>
-                {
-                    b.Navigation("Meals");
                 });
 
             modelBuilder.Entity("SmartCardBackend.Domain.Entities.Tag", b =>

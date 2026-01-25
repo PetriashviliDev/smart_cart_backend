@@ -60,8 +60,5 @@ public class UserAiRequestConfiguration : IEntityTypeConfiguration<UserAiRequest
         builder.HasIndex(x => new { x.UserId, x.RequestedAt });
         builder.HasIndex(x => new { x.Status, x.RequestedAt });
         builder.HasIndex(x => new { x.Provider, x.Model, x.RequestedAt });
-
-        builder.Navigation(x => x.User)
-            .AutoInclude();
     }
 }

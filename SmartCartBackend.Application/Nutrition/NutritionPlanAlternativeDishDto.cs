@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace SmartCardBackend.Application.Nutrition;
 
-public record NutritionPlanDish
+public record NutritionPlanAlternativeDishDto
 {
     public int Id { get; set; }
     
@@ -14,6 +14,4 @@ public record NutritionPlanDish
 
     [JsonProperty("cooking_time_in_minutes")]
     public int CookingTimeInMinutes { get; set; }
-
-    public List<NutritionPlanAlternativeDish> Alternatives { get; set; } = [];
 }

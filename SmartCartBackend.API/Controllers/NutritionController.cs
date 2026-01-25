@@ -17,7 +17,7 @@ public class NutritionController(
     : ControllerBase
 {
     [HttpPost("generate-plan")]
-    [ProducesResponseType(typeof(NutritionPlan), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(NutritionPlanDto), StatusCodes.Status200OK)]
     public async Task<IResult> GeneratePlanAsync(
         [FromBody] NutritionRequirements requirements)
     {
@@ -34,8 +34,28 @@ public class NutritionController(
         return Results.Ok(plan);
     }
     
+    // TODO: создать command
+    [HttpPost("accept-plan")]
+    [ProducesResponseType(typeof(NutritionPlanDto), StatusCodes.Status200OK)]
+    public async Task<IResult> AcceptPlanAsync(
+        [FromBody] NutritionRequirements requirements)
+    {
+        var user = await identityService.GetUserContextAsync(HttpContext.RequestAborted);
+
+        var request = new NutritionPlanGenerationRequest
+        {
+            User = user,
+            Requirements = requirements
+        };
+        
+        var plan = await pipeline.GenerateAsync(request, HttpContext.RequestAborted);
+        
+        return Results.Ok(plan);
+    }
+    
+    // TODO: создать query
     [HttpPost("{dishId:int}/ingredients")]
-    [ProducesResponseType(typeof(NutritionPlan), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(NutritionPlanDto), StatusCodes.Status200OK)]
     public async Task<IResult> GetIngredientsAsync([FromRoute] int dishId)
     {
         
