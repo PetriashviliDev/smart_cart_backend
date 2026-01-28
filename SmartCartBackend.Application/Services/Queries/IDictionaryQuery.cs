@@ -1,13 +1,17 @@
 using SmartCardBackend.Application.Responses;
+using SmartCardBackend.Domain;
 
 namespace SmartCardBackend.Application.Services.Queries;
 
 public interface IDictionaryQuery
 {
-    Task<EntityListResponse> GetDictionaryTypesAsync(
-        CancellationToken ct = default);
+    PageResponse<string> GetDictionaryTypes(
+        int page, 
+        int size);
     
-    Task<EntityListResponse> GetDictionaryAsync(
+    Task<PageResponse<Pair<int>>> GetDictionaryAsync(
         string dictionaryName,
+        int page, 
+        int size,
         CancellationToken ct = default);
 }

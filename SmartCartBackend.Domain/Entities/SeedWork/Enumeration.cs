@@ -17,11 +17,13 @@ public abstract class Enumeration : ISoftDeletable, IHasId<int>
         int id,
         string title,
         string internalName = null,
+        int? order = null,
         bool isDeleted = false)
     {
         Id = id;
         Title = title;
         InternalName = internalName?.ToSnakeCase();
+        Order = order;
         IsDeleted = isDeleted;
     }
     protected Enumeration() { }
@@ -40,6 +42,11 @@ public abstract class Enumeration : ISoftDeletable, IHasId<int>
     /// Внутреннее наименование
     /// </summary>
     public string InternalName { get; private set; }
+
+    /// <summary>
+    /// Порядковый номер
+    /// </summary>
+    public int? Order { get; private set; }
 
     /// <inheritdoc cref="ISoftDeletable"/>
     public bool IsDeleted { get; private set; }

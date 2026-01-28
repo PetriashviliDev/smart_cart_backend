@@ -14,6 +14,7 @@ using SmartCardBackend.Application.Services.Actualizers;
 using SmartCardBackend.Application.Services.Embedding;
 using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Application.Services.Identity;
+using SmartCardBackend.Application.Services.Queries;
 using SmartCardBackend.Application.Services.Searchers;
 using SmartCardBackend.Application.Services.Token;
 using SmartCartBackend.Common.Clock;
@@ -40,7 +41,7 @@ public static class Setup
             .AddNutritionServices();
 
         services
-            .AddHostedServices()
+            //.AddHostedServices()
             .AddHttpContextAccessor();
         
         services
@@ -52,7 +53,8 @@ public static class Setup
             .AddTransient<IGuidGenerator, GuidGenerator>()
             .AddScoped<IIdentityService, IdentityService>()
             .AddScoped<IEnumerationActualizer, EnumerationActualizer>()
-            .AddScoped<IDishSearcher, DishSearcher>();
+            .AddScoped<IDishSearcher, DishSearcher>()
+            .AddScoped<IDictionaryQuery, DictionaryQuery>();
 
         services.AddOptions<VectorSearchOptions>()
             .BindConfiguration(nameof(VectorSearchOptions));

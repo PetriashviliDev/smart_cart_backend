@@ -28,7 +28,7 @@ public class GenerationPlanPipelineStep(
             @"\{.*\}",
             RegexOptions.Singleline).Value;
 
-        var nutritionPlan = JsonConvert.DeserializeObject<NutritionPlanDto>(
+        var nutritionPlan = JsonConvert.DeserializeObject<NutritionPlanResponse>(
             nutritionPlanAsJson, jsonSerializerSettings);
 
         context.GeneratedPlan = await planEnricher.EnrichAsync(nutritionPlan, ct);
@@ -83,7 +83,7 @@ public class GenerationPlanPipelineStep(
                                       2 — Обед
                                       3 — Перекус
                                       4 — Ужин
-                                    - dishes.id и alternatives.id — идентификаторы из входного списка.
+                                    - dishes.id — идентификаторы из входного списка.
                                     
                                     ФОРМАТ ОТВЕТА (СТРОГО):
                                     {
@@ -96,10 +96,11 @@ public class GenerationPlanPipelineStep(
                                               "dishes": [
                                                 {
                                                   "id": 12,
-                                                  "alternatives": [
-                                                    { "id": 45 },
-                                                    { "id": 78 }
-                                                  ]
+                                                  "role": "main"
+                                                },
+                                                {
+                                                  "id": 13,
+                                                  "role": "alternative" 
                                                 }
                                               ]
                                             }
@@ -160,8 +161,8 @@ public class GenerationPlanPipelineStep(
                   ТРЕБОВАНИЯ К РАЦИОНУ:
                   - Рацион должен быть разнообразным между днями.
                   - В каждом приёме пищи:
-                    - 1–2 основных блюда.
-                    - Обязательно наличие напитка.
+                    - 1–2 основных блюда (смотреть по калориям).
+                    - Обязательно наличие напитка на завтрак и опционально на перекус (смотреть по калориям).
                   - Все блюда и альтернативы обязаны соответствовать ограничениям.
                   - Использовать ТОЛЬКО блюда из списка ниже.
                   

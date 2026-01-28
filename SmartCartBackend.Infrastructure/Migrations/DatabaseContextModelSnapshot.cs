@@ -44,6 +44,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -119,6 +122,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -187,6 +193,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<int?>("Limit")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Order")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
@@ -262,6 +271,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -332,6 +344,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -414,6 +429,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Property<int>("MealTypeId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Portions")
                         .HasColumnType("integer");
 
@@ -469,6 +487,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -603,6 +624,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
@@ -687,6 +711,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Proteins")
                         .HasColumnType("numeric");
 
@@ -756,6 +783,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -788,6 +818,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -874,15 +907,24 @@ namespace SmartCartBackend.Infrastructure.Migrations
                     b.Property<int>("DishId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Group")
+                        .HasColumnType("integer");
+
                     b.Property<int>("MealTypeId")
                         .HasColumnType("integer");
 
                     b.Property<Guid>("PlanId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DishId");
+
+                    b.HasIndex("Group");
 
                     b.HasIndex("MealTypeId");
 
@@ -1010,6 +1052,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -1042,6 +1087,9 @@ namespace SmartCartBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ShortTitle")
                         .IsRequired()

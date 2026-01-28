@@ -1,10 +1,10 @@
-using SmartCardBackend.Application.ResultResponseHelper;
+using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Application.Services.Generators;
 using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities;
 using SmartCartBackend.Common.Clock;
 
-namespace SmartCardBackend.Application.Mediatr.Command.Nutrition.AcceptPlan;
+namespace SmartCardBackend.Application.CQRS.Mediatr.Command.NutritionPlan.AcceptPlan;
 
 public class AcceptPlanCommandHandler(
     ISystemClock clock,
@@ -28,7 +28,7 @@ public class AcceptPlanCommandHandler(
         var now = clock.Now;
         var planId = guidGenerator.NewGuid;
 
-        var plan = NutritionPlan.Create(
+        var plan = Domain.Entities.NutritionPlan.Create(
             planId, command.User.Id, draft.Id, now);
         
         uow.NutritionPlanRepository.Add(plan);
@@ -39,18 +39,23 @@ public class AcceptPlanCommandHandler(
         {
             foreach (var meal in day.Meals)
             {
-                foreach (var dish in meal.Dishes)
+                foreach (var group in meal.Groups)
                 {
-                    var choice = NutritionPlanChoice.Create(
-                        guidGenerator.NewGuid,
-                        planId,
-                        day.Number,
-                        meal.Type.Id,
-                        dish.Id,
-                        dish.Choice
-                    );
-                    
-                    choices.Add(choice);
+                    foreach (var dish in group.Dishes)
+                    {
+                        var choice = NutritionPlanChoice.Create(
+                            guidGenerator.NewGuid,
+                            planId,
+                            day.Number,
+                            meal.Type.Id,
+                            dish.Id,
+                            group.Id,
+                            dish.Choice,
+                            dish.Role
+                        );
+                        
+                        choices.Add(choice);
+                    }
                 }
             }
         }

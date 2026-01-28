@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using SmartCardBackend.Domain.Attributes;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;
@@ -6,6 +7,7 @@ namespace SmartCardBackend.Domain.Entities;
 /// <summary>
 /// Доменная модель справочника единицы измерения
 /// </summary>
+[Dictionary]
 public class Unit : ActualizedEnumeration<Unit>
 {
     private Unit() { }

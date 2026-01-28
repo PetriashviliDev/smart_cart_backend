@@ -4,7 +4,7 @@ namespace SmartCardBackend.Application.Nutrition;
 
 public interface INutritionPlanEnricher
 {
-    Task<NutritionPlanDto> EnrichAsync(
-        NutritionPlanDto plan, 
+    Task<NutritionPlanResponse> EnrichAsync(
+        NutritionPlanResponse plan, 
         CancellationToken ct = default);
 }

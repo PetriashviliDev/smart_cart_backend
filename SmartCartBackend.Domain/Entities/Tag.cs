@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using SmartCardBackend.Domain.Attributes;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;
@@ -8,6 +9,7 @@ namespace SmartCardBackend.Domain.Entities;
 /// <summary>
 /// Доменная модель справочника тегов
 /// </summary>
+[Dictionary]
 public class Tag : ActualizedEnumeration<Tag>
 {
     #region Constructors

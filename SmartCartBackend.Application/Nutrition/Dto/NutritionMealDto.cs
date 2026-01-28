@@ -13,7 +13,7 @@ public record NutritionMealDto
     public Pair<int> Type { get; set; }
 
     /// <summary>
-    /// Основные блюда
+    /// Группа блюд
     /// </summary>
-    public List<NutritionPlanDishDto> Dishes { get; set; }
+    public List<NutritionPlanMealGroupDto> Groups { get; set; } = [];
 }

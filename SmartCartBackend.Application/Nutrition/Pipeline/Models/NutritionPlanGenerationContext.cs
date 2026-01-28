@@ -44,7 +44,7 @@ public record NutritionPlanGenerationContext
     /// <summary>
     /// Сгенерированный план
     /// </summary>
-    public NutritionPlanDto GeneratedPlan { get; set; }
+    public NutritionPlanResponse GeneratedPlan { get; set; }
 
     /// <summary>
     /// Идентификатор черновика

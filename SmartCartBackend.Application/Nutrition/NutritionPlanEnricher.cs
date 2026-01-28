@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using SmartCardBackend.Application.Nutrition.Dto;
 using SmartCardBackend.Application.Responses;
 using SmartCardBackend.Domain;
@@ -10,8 +11,8 @@ public class NutritionPlanEnricher(
     IUnitOfWork uow) 
     : INutritionPlanEnricher
 {
-    public async Task<NutritionPlanDto> EnrichAsync(
-        NutritionPlanDto plan, 
+    public async Task<NutritionPlanResponse> EnrichAsync(
+        NutritionPlanResponse plan, 
         CancellationToken ct = default)
     {
         var mealTypes = Enumeration
@@ -20,8 +21,9 @@ public class NutritionPlanEnricher(
 
         var dishIds = plan.Days
             .SelectMany(d => d.Meals)
+            .SelectMany(m => m.Groups)
             .SelectMany(m => m.Dishes)
-            .SelectMany(d => new[] { d.Id }.Concat(d.Alternatives.Select(a => a.Id)))
+            .Select(d => d.Id)
             .ToList();
         
         var dishes = (await uow.DishRepository.FindManyAsync(
@@ -30,7 +32,8 @@ public class NutritionPlanEnricher(
             ct: ct))
             .ToDictionary(d => d.Id);
 
-        var enrichmentPlan = new NutritionPlanDto();
+        var enrichmentPlan = new NutritionPlanResponse();
+        var groupId = 1;
 
         foreach (var day in plan.Days)
         {
@@ -48,55 +51,40 @@ public class NutritionPlanEnricher(
                     {
                         Title = mealTypes[meal.Type.Id].Title
                     },
-                    Dishes = []
+                    Groups = []
                 };
 
-                foreach (var dish in meal.Dishes)
+                foreach (var group in meal.Groups)
                 {
-                    var storedDish = dishes[dish.Id];
-
-                    var enrichmentDish = new NutritionPlanDishDto
+                    var enrichmentGroup = new NutritionPlanMealGroupDto
                     {
-                        Id = dish.Id,
-                        Title = storedDish.Title,
-                        Image = storedDish.Image,
-                        CookingTimeInMinutes = storedDish.CookingTime,
-                        Calories = storedDish.TotalCalories,
-                        Ingredients = [],
-                        Alternatives = []
+                        Id = groupId++,
+                        Dishes = []
                     };
-
-                    foreach (var ingredient in dish.Ingredients)
+                    
+                    foreach (var dish in group.Dishes)
                     {
-                        var enrichmentIngredient = ingredient with { 
-                            Category = new Pair<int>
-                        {
-                            Id = ingredient.Category.Id, 
-                            Title = ingredient.Category.Title
-                        }, 
-                            Unit = new Pair<int>
-                        {
-                            Id = ingredient.Unit.Id, 
-                            Title = ingredient.Unit.Title
-                        } };
-                        
-                        enrichmentDish.Ingredients.Add(enrichmentIngredient);
-                    }
+                        var storedDish = dishes[dish.Id];
 
-                    foreach (var alternative in dish.Alternatives)
-                    {
-                        var storedAlternative = dishes[alternative.Id];
-
-                        var enrichmentAlternative = new NutritionPlanAlternativeDishDto
+                        var enrichmentDish = new NutritionPlanDishDto
                         {
-                            Id = alternative.Id,
-                            Title = storedAlternative.Title,
-                            Image = storedAlternative.Image,
-                            CookingTimeInMinutes = storedAlternative.CookingTime,
-                            Calories = storedAlternative.TotalCalories
+                            Id = dish.Id,
+                            Title = storedDish.Title,
+                            Description = storedDish.Description,
+                            Image = storedDish.Image,
+                            Difficulty = new Pair<int>
+                            {
+                                Id = storedDish.Difficulty.Id, 
+                                Title = storedDish.Difficulty.Title
+                            },
+                            CookingTimeInMinutes = storedDish.CookingTime,
+                            RecipeSteps = RecipeSplitToSteps(storedDish.Recipe),
+                            Calories = storedDish.TotalCalories,
+                            Role = dish.Role,
+                            Ingredients = []
                         };
                         
-                        foreach (var ingredient in alternative.Ingredients)
+                        foreach (var ingredient in dish.Ingredients)
                         {
                             var enrichmentIngredient = ingredient with { 
                                 Category = new Pair<int>
@@ -110,13 +98,13 @@ public class NutritionPlanEnricher(
                                     Title = ingredient.Unit.Title
                                 } };
                         
-                            enrichmentAlternative.Ingredients.Add(enrichmentIngredient);
+                            enrichmentDish.Ingredients.Add(enrichmentIngredient);
                         }
                         
-                        enrichmentDish.Alternatives.Add(enrichmentAlternative);
+                        enrichmentGroup.Dishes.Add(enrichmentDish);
                     }
                     
-                    enrichmentMeal.Dishes.Add(enrichmentDish);
+                    enrichmentMeal.Groups.Add(enrichmentGroup);
                 }
                 
                 enrichmentDay.Meals.Add(enrichmentMeal);
@@ -126,5 +114,23 @@ public class NutritionPlanEnricher(
         }
 
         return enrichmentPlan;
+    }
+
+    private List<NutritionPlanRecipeStepDto> RecipeSplitToSteps(string recipe)
+    {
+        var parts = Regex
+            .Split(recipe, @"\s*(?=\d+\.\s)")
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .ToList();
+
+        var result = new List<NutritionPlanRecipeStepDto>(parts.Count);
+
+        for (var i = 0; i < parts.Count; i++)
+        {
+            var text = Regex.Replace(parts[i], @"^\d+\.\s*", "").Trim();
+            result.Add(new NutritionPlanRecipeStepDto { Order = i + 1, Description = text });
+        }
+
+        return result;
     }
 }

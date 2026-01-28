@@ -1,9 +1,9 @@
 namespace SmartCardBackend.Application.Nutrition.Dto;
 
 /// <summary>
-/// План
+/// План питания
 /// </summary>
-public record NutritionPlanDto
+public record NutritionPlanResponse
 {
     /// <summary>
     /// Идентификатор черновика

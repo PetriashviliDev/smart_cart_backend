@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using SmartCardBackend.Domain.Attributes;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;

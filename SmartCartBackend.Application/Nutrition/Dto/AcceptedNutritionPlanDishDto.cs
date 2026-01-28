@@ -16,4 +16,9 @@ public record AcceptedNutritionPlanDishDto
     /// Результат выбора
     /// </summary>
     public DishChoice Choice { get; set; }
+
+    /// <summary>
+    /// Роль блюда в рационе
+    /// </summary>
+    public DishRole Role { get; set; }
 }

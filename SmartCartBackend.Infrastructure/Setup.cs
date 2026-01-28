@@ -36,7 +36,9 @@ public static class Setup
             .AddScoped<ISessionRepository, SessionRepository>()
             .AddScoped<IUserAiRequestRepository, UserAiRequestRepository>()
             .AddScoped<IEnumerationRepository, EnumerationRepository>()
-            .AddScoped<INutritionPlanDraftRepository, NutritionPlanDraftRepository>();
+            .AddScoped<INutritionPlanDraftRepository, NutritionPlanDraftRepository>()
+            .AddScoped<INutritionPlanRepository, NutritionPlanRepository>()
+            .AddScoped<INutritionPlanChoiceRepository, NutritionPlanChoiceRepository>();
         
         return services;
     }

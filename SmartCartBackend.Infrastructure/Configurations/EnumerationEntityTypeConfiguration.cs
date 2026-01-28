@@ -25,6 +25,9 @@ public class EnumerationEntityTypeConfiguration<TEnumeration>
             .HasMaxLength(256)
             .IsRequired();
         
+        builder.Property(x => x.Order)
+            .IsRequired(false);
+        
         builder.Property(x => x.IsDeleted)
             .IsRequired()
             .HasDefaultValue(false);

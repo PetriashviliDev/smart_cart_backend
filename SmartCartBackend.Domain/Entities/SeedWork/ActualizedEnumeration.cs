@@ -12,9 +12,9 @@ public abstract class ActualizedEnumeration<TEnumeration>
 
     protected ActualizedEnumeration(
         int id,
-        string name,
+        string title,
         string internalName)
-        : base(id, name, internalName) { }
+        : base(id, title, internalName) { }
 
     /// <inheritdoc />
     public virtual void Actualize(TEnumeration enumeration)

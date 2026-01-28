@@ -1,4 +1,4 @@
-namespace SmartCardBackend.Application.ResultResponseHelper;
+namespace SmartCardBackend.Application.Responses;
 
 public sealed class Error
 {
@@ -22,9 +22,9 @@ public sealed class Error
     public static Error BadRequest(string description) => new(description, ErrorType.BadRequest);
     public static Error Conflict(string description) => new(description, ErrorType.Conflict);
     
-    public static implicit operator ResultResponseHelper.Result(Error error) => ResultResponseHelper.Result.Failure(error);
+    public static implicit operator Result(Error error) => Result.Failure(error);
     
-    public ResultResponseHelper.Result ToResult() => ResultResponseHelper.Result.Failure(this);
+    public Result ToResult() => Result.Failure(this);
 }
 
 public enum ErrorType

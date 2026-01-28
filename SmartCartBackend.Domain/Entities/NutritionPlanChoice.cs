@@ -22,7 +22,9 @@ public class NutritionPlanChoice : Entity<Guid>
         MealType mealType,
         int dishId,
         Dish dish,
-        DishChoice choice) : base(id)
+        int group,
+        DishChoice choice,
+        DishRole role) : base(id)
     {
         PlanId = planId;
         Plan = plan;
@@ -31,7 +33,9 @@ public class NutritionPlanChoice : Entity<Guid>
         MealType = mealType;
         DishId = dishId;
         Dish = dish;
+        Group = group;
         Choice = choice;
+        Role = role;
     }
     
     private NutritionPlanChoice(
@@ -40,14 +44,18 @@ public class NutritionPlanChoice : Entity<Guid>
         int dayNumber,
         int mealTypeId,
         int dishId,
-        DishChoice choice) 
+        int group,
+        DishChoice choice, 
+        DishRole role) 
         : base(id)
     {
         PlanId = planId;
         DayNumber = dayNumber;
         MealTypeId = mealTypeId;
         DishId = dishId;
+        Group = group;
         Choice = choice;
+        Role = role;
     }
 
     public static NutritionPlanChoice Create(
@@ -56,10 +64,19 @@ public class NutritionPlanChoice : Entity<Guid>
         int dayNumber,
         int mealTypeId,
         int dishId,
-        DishChoice choice)
+        int group,
+        DishChoice choice, 
+        DishRole role)
     {
         var dishChoice = new NutritionPlanChoice(
-            id, planId, dayNumber, mealTypeId, dishId, choice);
+            id, 
+            planId, 
+            dayNumber, 
+            mealTypeId, 
+            dishId,
+            group,
+            choice, 
+            role);
         
         return dishChoice;
     }
@@ -92,9 +109,19 @@ public class NutritionPlanChoice : Entity<Guid>
     public Dish Dish { get; private set; }
 
     /// <summary>
-    /// Признак выбора
+    /// Группа
+    /// </summary>
+    public int Group { get; set; }
+
+    /// <summary>
+    /// Результат выбора
     /// </summary>
     public DishChoice Choice { get; private set; }
+    
+    /// <summary>
+    /// Роль блюда в рационе
+    /// </summary>
+    public DishRole Role { get; private set; }
     
     #endregion Properties
 }

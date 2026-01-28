@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using SmartCardBackend.Domain;
 using SmartCardBackend.Domain.Entities.SeedWork;
 using SmartCardBackend.Domain.Repositories;
 
@@ -17,24 +18,54 @@ public abstract class Repository<TEntity, TIdentifier>(
         Context.Set<TEntity>();
     
     public async Task<List<TEntity>> FindManyAsync(
-        Expression<Func<TEntity, bool>> expression, 
+        Expression<Func<TEntity, bool>> filter,
+        Sort<TEntity> sort,
+        int page = 1,
+        int size = 30,
         bool trackingEnabled = true, 
         CancellationToken ct = default)
     {
         var query = Set.AsQueryable();
         
-        if (expression != null)
-            query = query.Where(expression);
+        if (filter != null)
+            query = query.Where(filter);
         
         if (!trackingEnabled)
             query = query.AsNoTracking();
+        
+        sort ??= new Sort<TEntity>(e => e.Id);
+        
+        query = sort.Direction == SortDirection.Asc
+            ? query
+                .OrderBy(sort.KeySelector)
+                .ThenBy(e => e.Id)
+            : query
+                .OrderByDescending(sort.KeySelector)
+                .ThenByDescending(e => e.Id);
+        
+        query = query
+            .Skip((page - 1) * size)
+            .Take(size);
         
         var entities = await query.ToListAsync(ct);
         return entities;
     }
 
+    public async Task<int> CountAsync(
+        Expression<Func<TEntity, bool>> filter = null, 
+        CancellationToken ct = default)
+    {
+        var query = Set.AsQueryable();
+        
+        if (filter != null)
+            query = query.Where(filter);
+        
+        var count = await query.CountAsync(ct);
+        return count;
+    }
+
     public async Task<TEntity> SingleOrDefaultAsync(
-        Expression<Func<TEntity, bool>> expression, 
+        Expression<Func<TEntity, bool>> filter, 
         bool trackingEnabled = true, 
         CancellationToken ct = default)
     {
@@ -44,7 +75,7 @@ public abstract class Repository<TEntity, TIdentifier>(
             query = query.AsNoTracking();
         
         var entity = await query
-            .SingleOrDefaultAsync(expression, ct);
+            .SingleOrDefaultAsync(filter, ct);
         
         return entity;
     }

@@ -26,8 +26,15 @@ public class NutritionPlanChoiceConfiguration : IEntityTypeConfiguration<Nutriti
         builder.Property(x => x.DishId)
             .IsRequired();
         
+        builder.Property(x => x.Group)
+            .IsRequired();
+        
         builder.Property(x => x.Choice)
             .HasConversion(new EnumToStringConverter<DishChoice>())
+            .IsRequired();
+
+        builder.Property(x => x.Role)
+            .HasConversion(new EnumToStringConverter<DishRole>())
             .IsRequired();
         
         builder.HasOne(x => x.Plan)
@@ -39,5 +46,7 @@ public class NutritionPlanChoiceConfiguration : IEntityTypeConfiguration<Nutriti
             .WithMany()
             .HasForeignKey(x => x.DishId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => x.Group);
     }
 }

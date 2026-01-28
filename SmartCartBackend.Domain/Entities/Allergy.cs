@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
+using SmartCardBackend.Domain.Attributes;
 using SmartCardBackend.Domain.Entities.SeedWork;
 
 namespace SmartCardBackend.Domain.Entities;
 
+[Dictionary]
 public class Allergy : ActualizedEnumeration<Allergy>
 {
     #region Constructors

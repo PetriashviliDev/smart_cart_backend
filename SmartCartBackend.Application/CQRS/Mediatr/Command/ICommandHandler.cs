@@ -1,10 +1,10 @@
 using MediatR;
-using SmartCardBackend.Application.ResultResponseHelper;
+using SmartCardBackend.Application.Responses;
 
-namespace SmartCardBackend.Application.Mediatr.Command;
+namespace SmartCardBackend.Application.CQRS.Mediatr.Command;
 
 public interface ICommandHandler<in TCommand> 
-    : IRequestHandler<TCommand, ResultResponseHelper.Result>
+    : IRequestHandler<TCommand, Result>
     where TCommand : ICommand;
     
 public interface ICommandHandler<in TCommand, TResponse> 
